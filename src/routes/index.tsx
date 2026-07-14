@@ -629,16 +629,16 @@ function Contact() {
             </p>
 
             <ul className="mt-10 space-y-6">
-              <ContactRow icon={MapPin} label="Address" value="221B Flavor Street, Grand Plaza, City Center" />
-              <ContactRow icon={Phone} label="Phone" value="+1 (555) 246-8100" />
+              <ContactRow icon={MapPin} label="Address" value="Shop No 1, Plot No 18, Gulaab Bagh, Nawada Metro Station, New Delhi" />
+              <ContactRow icon={Phone} label="Phone" value="+91 70656 56537" />
               <ContactRow icon={Mail} label="Email" value="hello@burgergrand.com" />
               <ContactRow icon={Clock} label="Hours" value="Mon–Sun · 11:00 AM — 12:00 AM" />
             </ul>
 
             <div className="mt-10 overflow-hidden rounded-3xl glass">
               <iframe
-                title="Burger Grand location"
-                src="https://www.google.com/maps?q=Times+Square+New+York&output=embed"
+                title="Burger Grand — Nawada location"
+                src="https://www.google.com/maps?q=Burger+Grand+Nawada+Metro+Station+Gulaab+Bagh&output=embed"
                 className="h-64 w-full grayscale-[30%]"
                 loading="lazy"
               />
