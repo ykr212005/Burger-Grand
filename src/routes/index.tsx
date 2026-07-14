@@ -417,9 +417,9 @@ function Signature() {
                     <h3 className="font-display text-lg font-bold text-white">{s.name}</h3>
                     <div className="font-display text-lg font-bold text-accent">₹{s.price}</div>
                   </div>
-                  <button className="mt-4 flex w-full items-center justify-center gap-2 rounded-full bg-white/5 py-2.5 text-sm font-semibold text-white transition hover:bg-[image:var(--gradient-fire)] hover:shadow-glow">
+                  <Link to="/menu" className="mt-4 flex w-full items-center justify-center gap-2 rounded-full bg-white/5 py-2.5 text-sm font-semibold text-white transition hover:bg-[image:var(--gradient-fire)] hover:shadow-glow">
                     <Plus className="h-4 w-4" /> Add to cart
-                  </button>
+                  </Link>
                 </div>
               </div>
             </TiltCard>
