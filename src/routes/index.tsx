@@ -77,7 +77,7 @@ function Hero() {
       className="relative flex min-h-screen items-center overflow-hidden pt-28"
       style={{ background: "var(--gradient-hero)" }}
     >
-      {/* bg video */}
+      {/* bg video — sits behind the headline area */}
       <video
         src={heroVideo.url}
         poster={heroBg}
@@ -87,7 +87,7 @@ function Hero() {
         playsInline
         preload="auto"
         aria-hidden
-        className="pointer-events-none absolute inset-0 h-full w-full object-contain"
+        className="pointer-events-none absolute inset-0 h-full w-full object-contain object-top"
       />
 
       {/* steam particles */}
@@ -113,7 +113,7 @@ function Hero() {
             <Sparkles className="h-3.5 w-3.5" /> Premium kitchen · Since 2014
           </span>
 
-          <h1 className="mt-6 font-display text-5xl font-black leading-[0.95] sm:text-6xl md:text-7xl lg:text-[5.5rem]">
+          <h1 className="mt-6 font-display text-5xl font-black leading-[0.95] sm:text-6xl md:text-7xl lg:text-[5.5rem] drop-shadow-[0_4px_24px_rgba(0,0,0,0.85)]">
             Fresh. Hot. <br />
             <span className="text-gradient-fire">Loaded With Flavor.</span>
           </h1>
