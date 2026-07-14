@@ -87,10 +87,8 @@ function Hero() {
         playsInline
         preload="auto"
         aria-hidden
-        className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-50"
+        className="pointer-events-none absolute inset-0 h-full w-full object-contain"
       />
-      <div className="pointer-events-none absolute inset-0 bg-black/50" />
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,transparent,oklch(0.09_0.005_20)_75%)]" />
 
       {/* steam particles */}
       {[...Array(10)].map((_, i) => (
