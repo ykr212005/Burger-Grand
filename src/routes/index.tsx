@@ -362,15 +362,15 @@ function WhyChoose() {
 
 /* ---------------- SIGNATURE ---------------- */
 const signature = [
-  { name: "Signature Burger", img: burgerImg, price: 12.9, rating: 4.9, tag: "Best Seller" },
-  { name: "Margherita Pizza", img: pizzaImg, price: 14.5, rating: 4.8, tag: "Classic" },
-  { name: "Loaded Veg Pizza", img: pizzaImg, price: 15.9, rating: 4.7 },
-  { name: "Chicken Burger", img: burgerImg, price: 10.9, rating: 4.8, tag: "Popular" },
-  { name: "Club Sandwich", img: sandwichImg, price: 10.5, rating: 4.7 },
-  { name: "Mexican Wrap", img: wrapImg, price: 9.9, rating: 4.6 },
-  { name: "Oreo Shake", img: shakeImg, price: 6.5, rating: 4.9, tag: "Chef's Pick" },
-  { name: "Chocolate Shake", img: shakeImg, price: 6.2, rating: 4.7 },
-  { name: "Hot Fudge Sundae", img: sundaeImg, price: 7.2, rating: 4.9 },
+  { name: "Grand Spl Burger", img: burgerImg, price: 90, rating: 4.9, tag: "Best Seller" },
+  { name: "Grand Spl Pizza", img: pizzaImg, price: 220, rating: 4.9, tag: "Chef's Pick" },
+  { name: "Loaded Paneer Pizza", img: pizzaImg, price: 190, rating: 4.8 },
+  { name: "Cheese Chicken Burger", img: burgerImg, price: 90, rating: 4.8, tag: "Popular" },
+  { name: "Grand Spl Sandwich", img: sandwichImg, price: 100, rating: 4.8 },
+  { name: "Chicken Wrap", img: wrapImg, price: 100, rating: 4.8 },
+  { name: "Choco Oreo Shake", img: shakeImg, price: 130, rating: 4.8, tag: "Premium" },
+  { name: "Cold Coffee", img: shakeImg, price: 100, rating: 4.8 },
+  { name: "Hot Chocolate Fudge", img: sundaeImg, price: 90, rating: 4.9 },
 ];
 
 function Signature() {
