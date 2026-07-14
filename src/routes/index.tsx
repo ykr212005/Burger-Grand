@@ -28,12 +28,12 @@ export const Route = createFileRoute("/")({
 });
 
 const stories = [
-  { id: "burger",  img: burgerImg,  title: "The Signature Burger",  desc: "Double-stack Angus beef, aged cheddar, smoky bacon jam, brioche bun toasted in butter.",  price: "$12.90", tone: "from-[oklch(0.58_0.22_27)] to-[oklch(0.72_0.19_55)]" },
-  { id: "pizza",   img: pizzaImg,   title: "Wood-Fired Margherita", desc: "Stone-baked at 480°C. San Marzano tomato, fior di latte, torn basil, extra virgin olive oil.",   price: "$14.50", tone: "from-[oklch(0.72_0.19_55)] to-[oklch(0.86_0.17_88)]" },
-  { id: "sandwich",img: sandwichImg,title: "The Grand Club",        desc: "Grilled chicken, crispy bacon, aged cheddar, garden vegetables between toasted sourdough.",     price: "$10.50", tone: "from-[oklch(0.86_0.17_88)] to-[oklch(0.72_0.19_55)]" },
-  { id: "wrap",    img: wrapImg,    title: "Mexican Fire Wrap",     desc: "Spiced chicken, chipotle mayo, avocado, cheddar, romaine and salsa rolled in a soft tortilla.",price: "$9.90",  tone: "from-[oklch(0.72_0.19_55)] to-[oklch(0.58_0.22_27)]" },
-  { id: "shake",   img: shakeImg,   title: "Oreo Storm Shake",      desc: "Vanilla soft-serve churned with Oreo cookies, whipped cream, chocolate drizzle.",              price: "$6.50",  tone: "from-[oklch(0.58_0.22_27)] to-[oklch(0.86_0.17_88)]" },
-  { id: "sundae",  img: sundaeImg,  title: "Hot Fudge Sundae",      desc: "Layers of vanilla ice cream, roasted nuts, hot fudge, whipped cream and a maraschino cherry.",price: "$7.20",  tone: "from-[oklch(0.86_0.17_88)] to-[oklch(0.58_0.22_27)]" },
+  { id: "burger",  img: burgerImg,  title: "Grand Spl Burger",       desc: "Our signature stack — loaded patty, cheese, fresh veggies, house sauce in a toasted bun.",       price: "₹90",  tone: "from-[oklch(0.58_0.22_27)] to-[oklch(0.72_0.19_55)]" },
+  { id: "pizza",   img: pizzaImg,   title: "Grand Spl Pizza",        desc: "Stone-baked crust loaded with paneer, capsicum, corn, olives and molten mozzarella.",           price: "₹220", tone: "from-[oklch(0.72_0.19_55)] to-[oklch(0.86_0.17_88)]" },
+  { id: "sandwich",img: sandwichImg,title: "Grand Spl Sandwich",     desc: "Grilled veggie patty, cheese, coleslaw and garden fresh vegetables between crisp bread.",       price: "₹100", tone: "from-[oklch(0.86_0.17_88)] to-[oklch(0.72_0.19_55)]" },
+  { id: "wrap",    img: wrapImg,    title: "Paneer Wrap",            desc: "Spiced paneer, mint mayo, onions and fresh salad rolled in a soft tortilla.",                   price: "₹100", tone: "from-[oklch(0.72_0.19_55)] to-[oklch(0.58_0.22_27)]" },
+  { id: "shake",   img: shakeImg,   title: "Chocolate Oreo Shake",   desc: "Thick chocolate shake blended with Oreo cookies, topped with whipped cream and drizzle.",       price: "₹130", tone: "from-[oklch(0.58_0.22_27)] to-[oklch(0.86_0.17_88)]" },
+  { id: "sundae",  img: sundaeImg,  title: "Hot Chocolate Fudge",    desc: "Warm chocolate fudge over vanilla ice cream, nuts, whipped cream and a cherry.",                price: "₹90",  tone: "from-[oklch(0.86_0.17_88)] to-[oklch(0.58_0.22_27)]" },
 ];
 
 const featureImages = [burgerImg, pizzaImg, sandwichImg, wrapImg, shakeImg, sundaeImg];
