@@ -77,7 +77,7 @@ function Hero() {
       className="relative flex min-h-screen items-center overflow-hidden pt-28"
       style={{ background: "var(--gradient-hero)" }}
     >
-      {/* bg video */}
+      {/* bg video — sits behind the headline area */}
       <video
         src={heroVideo.url}
         poster={heroBg}
@@ -87,7 +87,7 @@ function Hero() {
         playsInline
         preload="auto"
         aria-hidden
-        className="pointer-events-none absolute inset-0 h-full w-full object-contain"
+        className="pointer-events-none absolute inset-0 -z-10 h-full w-full object-contain object-top"
       />
 
       {/* steam particles */}
