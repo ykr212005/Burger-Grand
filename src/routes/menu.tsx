@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import { useMemo, useState } from "react";
-import { Search, Plus, Minus, Star, Leaf, Flame, ShoppingBag } from "lucide-react";
+import { Search, Plus, Minus, Star, Leaf, Flame, ShoppingBag, X, Check, MapPin, Phone } from "lucide-react";
 
 import burgerImg from "@/assets/burger.jpg";
 import pizzaImg from "@/assets/pizza.jpg";
@@ -15,74 +15,186 @@ export const Route = createFileRoute("/menu")({
   head: () => ({
     meta: [
       { title: "Menu — Burger Grand" },
-      { name: "description", content: "Browse the full Burger Grand menu: burgers, pizzas, sandwiches, wraps, shakes, sundaes, beverages and combos." },
-      { property: "og:title", content: "Menu — Burger Grand" },
-      { property: "og:description", content: "Handcrafted burgers, wood-fired pizzas, shakes and sundaes." },
+      { name: "description", content: "Browse the full Burger Grand menu — burgers, pizzas, wraps, sandwiches, shakes, sundaes and more." },
     ],
   }),
   component: MenuPage,
 });
 
 type Item = {
-  name: string; price: number; desc: string; img: string;
+  name: string; price: number; desc?: string; img: string;
   category: string; veg: boolean; spicy?: boolean; popular?: boolean; rating: number;
 };
 
 const items: Item[] = [
-  // Burgers
-  { name: "Classic Cheeseburger", price: 8.5, desc: "Beef patty, cheddar, pickles, house sauce.", img: burgerImg, category: "Burgers", veg: false, rating: 4.8, popular: true },
-  { name: "Signature Grand Burger", price: 12.9, desc: "Double Angus, bacon jam, aged cheddar.", img: burgerImg, category: "Burgers", veg: false, rating: 4.9, popular: true },
-  { name: "Spicy Chicken Burger", price: 10.9, desc: "Crispy chicken, jalapeño mayo, slaw.", img: burgerImg, category: "Burgers", veg: false, spicy: true, rating: 4.7 },
-  { name: "Veggie Delight Burger", price: 9.5, desc: "House patty, avocado, tomato, greens.", img: burgerImg, category: "Burgers", veg: true, rating: 4.6 },
+  // Burger
+  { name: "Yummy Burger", price: 40, img: burgerImg, category: "Burger", veg: true, rating: 4.5 },
+  { name: "Aloo Tikki Burger", price: 45, img: burgerImg, category: "Burger", veg: true, rating: 4.6 },
+  { name: "Veg Burger", price: 50, img: burgerImg, category: "Burger", veg: true, rating: 4.5 },
+  { name: "Veg Cheese Burger", price: 60, img: burgerImg, category: "Burger", veg: true, rating: 4.7 },
+  { name: "Spicy Cheese Burger", price: 60, img: burgerImg, category: "Burger", veg: true, spicy: true, rating: 4.6 },
+  { name: "Green Veggi Burger", price: 60, img: burgerImg, category: "Burger", veg: true, rating: 4.5 },
+  { name: "Achari Burger", price: 60, img: burgerImg, category: "Burger", veg: true, rating: 4.5 },
+  { name: "Loaded Burger", price: 65, img: burgerImg, category: "Burger", veg: true, rating: 4.7, popular: true },
+  { name: "Cheese Loaded Burger", price: 70, img: burgerImg, category: "Burger", veg: true, rating: 4.8, popular: true },
+  { name: "Double Slice Cheese Burger", price: 75, img: burgerImg, category: "Burger", veg: true, rating: 4.7 },
+  { name: "Grand Spl Burger", price: 90, img: burgerImg, category: "Burger", veg: true, rating: 4.9, popular: true },
+  { name: "Spicy Paneer Burger", price: 80, img: burgerImg, category: "Burger", veg: true, spicy: true, rating: 4.6 },
+  { name: "Pizza Burger", price: 90, img: burgerImg, category: "Burger", veg: true, rating: 4.7 },
+  { name: "Veg Whopper Burger", price: 85, img: burgerImg, category: "Burger", veg: true, rating: 4.6 },
+  { name: "Maharaja Burger", price: 90, img: burgerImg, category: "Burger", veg: true, rating: 4.8 },
+  { name: "Loaded Paneer Burger", price: 120, img: burgerImg, category: "Burger", veg: true, rating: 4.8 },
 
-  // Pizza
-  { name: "Margherita", price: 14.5, desc: "Tomato, fior di latte, basil, olive oil.", img: pizzaImg, category: "Pizza", veg: true, rating: 4.8, popular: true },
-  { name: "Loaded Veg", price: 15.9, desc: "Bell peppers, olives, corn, jalapeños.", img: pizzaImg, category: "Pizza", veg: true, rating: 4.7 },
-  { name: "BBQ Chicken", price: 16.9, desc: "Smoked chicken, BBQ sauce, red onion.", img: pizzaImg, category: "Pizza", veg: false, rating: 4.8 },
-  { name: "Diavola", price: 15.5, desc: "Spicy pepperoni, mozzarella, chili oil.", img: pizzaImg, category: "Pizza", veg: false, spicy: true, rating: 4.7 },
+  // Grilled Burger
+  { name: "Grilled Veg Burger", price: 60, img: burgerImg, category: "Grilled Burger", veg: true, rating: 4.5 },
+  { name: "Grilled Cheese Burger", price: 70, img: burgerImg, category: "Grilled Burger", veg: true, rating: 4.6 },
+  { name: "Grilled Spicy Cheese Burger", price: 80, img: burgerImg, category: "Grilled Burger", veg: true, spicy: true, rating: 4.6 },
+  { name: "Grilled Cheese Paneer Burger", price: 90, img: burgerImg, category: "Grilled Burger", veg: true, rating: 4.7 },
 
-  // Sandwiches
-  { name: "Club Sandwich", price: 10.5, desc: "Chicken, bacon, cheese, veggies.", img: sandwichImg, category: "Sandwiches", veg: false, rating: 4.7, popular: true },
-  { name: "Grilled Cheese", price: 7.9, desc: "Three-cheese melt on sourdough.", img: sandwichImg, category: "Sandwiches", veg: true, rating: 4.6 },
-  { name: "Chicken Sub", price: 9.5, desc: "Herbed chicken, lettuce, aioli.", img: sandwichImg, category: "Sandwiches", veg: false, rating: 4.5 },
+  // Chicken Burgers
+  { name: "Egg Burger", price: 70, img: burgerImg, category: "Chicken Burgers", veg: false, rating: 4.5 },
+  { name: "Chicken Burger", price: 80, img: burgerImg, category: "Chicken Burgers", veg: false, rating: 4.7 },
+  { name: "Cheese Chicken Burger", price: 90, img: burgerImg, category: "Chicken Burgers", veg: false, rating: 4.8, popular: true },
+  { name: "Spicy Chicken Burger", price: 90, img: burgerImg, category: "Chicken Burgers", veg: false, spicy: true, rating: 4.7 },
+  { name: "Chicken Pizza Burger", price: 120, img: burgerImg, category: "Chicken Burgers", veg: false, rating: 4.7 },
+  { name: "Grand Chicken Burger", price: 120, img: burgerImg, category: "Chicken Burgers", veg: false, rating: 4.8 },
+  { name: "Double Chicken Burger", price: 120, img: burgerImg, category: "Chicken Burgers", veg: false, rating: 4.8 },
+  { name: "Chicken Whopper", price: 140, img: burgerImg, category: "Chicken Burgers", veg: false, rating: 4.8 },
 
-  // Wraps
-  { name: "Mexican Wrap", price: 9.9, desc: "Spiced chicken, chipotle, avocado.", img: wrapImg, category: "Wraps", veg: false, spicy: true, rating: 4.6 },
-  { name: "Paneer Tikka Wrap", price: 9.5, desc: "Grilled paneer, mint yogurt.", img: wrapImg, category: "Wraps", veg: true, rating: 4.6 },
-  { name: "Falafel Wrap", price: 8.9, desc: "Crispy falafel, hummus, tahini.", img: wrapImg, category: "Wraps", veg: true, rating: 4.5 },
+  // Wrap Roll
+  { name: "Aloo Wrap", price: 70, img: wrapImg, category: "Wrap Roll", veg: true, rating: 4.5 },
+  { name: "Hara-Bhara Wrap", price: 80, img: wrapImg, category: "Wrap Roll", veg: true, rating: 4.6 },
+  { name: "Paneer Wrap", price: 100, img: wrapImg, category: "Wrap Roll", veg: true, rating: 4.7 },
+  { name: "Chaap Wrap", price: 100, img: wrapImg, category: "Wrap Roll", veg: true, rating: 4.6 },
+  { name: "Egg Wrap", price: 80, img: wrapImg, category: "Wrap Roll", veg: false, rating: 4.6 },
+  { name: "Chicken Wrap", price: 100, img: wrapImg, category: "Wrap Roll", veg: false, rating: 4.8, popular: true },
+  { name: "Double Chicken Wrap", price: 160, img: wrapImg, category: "Wrap Roll", veg: false, rating: 4.8 },
+  { name: "Double Paneer Wrap", price: 160, img: wrapImg, category: "Wrap Roll", veg: true, rating: 4.7 },
 
-  // Shakes
-  { name: "Oreo Shake", price: 6.5, desc: "Vanilla soft-serve, Oreo, whipped cream.", img: shakeImg, category: "Shakes", veg: true, rating: 4.9, popular: true },
-  { name: "Chocolate Shake", price: 6.2, desc: "Dark chocolate, milk, whipped cream.", img: shakeImg, category: "Shakes", veg: true, rating: 4.8 },
-  { name: "Strawberry Shake", price: 6.2, desc: "Fresh strawberry, vanilla ice cream.", img: shakeImg, category: "Shakes", veg: true, rating: 4.7 },
+  // Grilled Sandwich
+  { name: "Veg Coleslaw Sandwich", price: 60, img: sandwichImg, category: "Grilled Sandwich", veg: true, rating: 4.5 },
+  { name: "Veggie Sandwich", price: 80, img: sandwichImg, category: "Grilled Sandwich", veg: true, rating: 4.6 },
+  { name: "Veg Patty Sandwich", price: 80, img: sandwichImg, category: "Grilled Sandwich", veg: true, rating: 4.6 },
+  { name: "Hara-Bhara Sandwich", price: 90, img: sandwichImg, category: "Grilled Sandwich", veg: true, rating: 4.6 },
+  { name: "Onion Tomato Sandwich", price: 90, img: sandwichImg, category: "Grilled Sandwich", veg: true, rating: 4.4 },
+  { name: "Paneer Sandwich", price: 100, img: sandwichImg, category: "Grilled Sandwich", veg: true, rating: 4.7 },
+  { name: "Grand Spl Sandwich", price: 100, img: sandwichImg, category: "Grilled Sandwich", veg: true, rating: 4.8, popular: true },
+  { name: "Chicken Sandwich", price: 120, img: sandwichImg, category: "Grilled Sandwich", veg: false, rating: 4.7 },
+  { name: "Bombay Sandwich", price: 140, img: sandwichImg, category: "Grilled Sandwich", veg: true, rating: 4.7 },
 
-  // Sundaes
-  { name: "Hot Fudge Sundae", price: 7.2, desc: "Vanilla, fudge, nuts, cherry.", img: sundaeImg, category: "Sundaes", veg: true, rating: 4.9, popular: true },
-  { name: "Chocolate Brownie Sundae", price: 7.9, desc: "Warm brownie, ice cream, sauce.", img: sundaeImg, category: "Sundaes", veg: true, rating: 4.8 },
-  { name: "Berry Bliss Sundae", price: 7.5, desc: "Mixed berries, vanilla, granola.", img: sundaeImg, category: "Sundaes", veg: true, rating: 4.6 },
+  // Garlic Bread
+  { name: "Spicy Garlic Bread", price: 70, img: sandwichImg, category: "Garlic Bread", veg: true, spicy: true, rating: 4.5 },
+  { name: "Cheese Garlic Bread", price: 80, img: sandwichImg, category: "Garlic Bread", veg: true, rating: 4.7, popular: true },
+  { name: "Veg Cheese Garlic Bread", price: 90, img: sandwichImg, category: "Garlic Bread", veg: true, rating: 4.7 },
+  { name: "Paneer Garlic Bread", price: 100, img: sandwichImg, category: "Garlic Bread", veg: true, rating: 4.7 },
+  { name: "Grand Spl Garlic Bread", price: 120, img: sandwichImg, category: "Garlic Bread", veg: true, rating: 4.8 },
+  { name: "Chicken Garlic Bread", price: 130, img: sandwichImg, category: "Garlic Bread", veg: false, rating: 4.7 },
 
-  // Beverages
-  { name: "Fresh Lemonade", price: 3.5, desc: "House-pressed lemon, mint.", img: shakeImg, category: "Beverages", veg: true, rating: 4.6 },
-  { name: "Iced Coffee", price: 4.2, desc: "Cold brew over ice.", img: shakeImg, category: "Beverages", veg: true, rating: 4.5 },
-  { name: "Soft Drink", price: 2.5, desc: "Coke, Sprite or Fanta.", img: shakeImg, category: "Beverages", veg: true, rating: 4.3 },
+  // Pizza (Regular price)
+  { name: "Plain Pizza", price: 140, img: pizzaImg, category: "Pizza", veg: true, rating: 4.5 },
+  { name: "Onion and Capsicum Pizza", price: 150, img: pizzaImg, category: "Pizza", veg: true, rating: 4.6 },
+  { name: "Cheese Tomato Pizza", price: 150, img: pizzaImg, category: "Pizza", veg: true, rating: 4.6 },
+  { name: "Sweet Corn with Jalapeno Pizza", price: 150, img: pizzaImg, category: "Pizza", veg: true, spicy: true, rating: 4.6 },
+  { name: "Mushroom and Capsicum Pizza", price: 180, img: pizzaImg, category: "Pizza", veg: true, rating: 4.7 },
+  { name: "Loaded Paneer Pizza", price: 190, img: pizzaImg, category: "Pizza", veg: true, rating: 4.8, popular: true },
+  { name: "Punjabi Paneer Pizza", price: 190, img: pizzaImg, category: "Pizza", veg: true, rating: 4.7 },
+  { name: "Tandoori Paneer Pizza", price: 190, img: pizzaImg, category: "Pizza", veg: true, rating: 4.7 },
+  { name: "Pasta Pizza", price: 200, img: pizzaImg, category: "Pizza", veg: true, rating: 4.6 },
+  { name: "Grand Spl Pizza", price: 220, img: pizzaImg, category: "Pizza", veg: true, rating: 4.9, popular: true },
+  { name: "Makhani Pizza", price: 220, img: pizzaImg, category: "Pizza", veg: true, rating: 4.7 },
+
+  // Chicken Pizza
+  { name: "BBQ Chicken Pizza", price: 220, img: pizzaImg, category: "Chicken Pizza", veg: false, rating: 4.8, popular: true },
+  { name: "Chicken with Golden Corn Pizza", price: 220, img: pizzaImg, category: "Chicken Pizza", veg: false, rating: 4.7 },
+  { name: "Tandoori Chicken Pizza", price: 230, img: pizzaImg, category: "Chicken Pizza", veg: false, rating: 4.8 },
+  { name: "Non-Veg Supreme Pizza", price: 250, img: pizzaImg, category: "Chicken Pizza", veg: false, rating: 4.8 },
+
+  // Mocktail
+  { name: "Fresh Lime", price: 50, img: shakeImg, category: "Mocktail", veg: true, rating: 4.5 },
+  { name: "Mint Mojito", price: 60, img: shakeImg, category: "Mocktail", veg: true, rating: 4.7, popular: true },
+  { name: "Blue-Crasho", price: 60, img: shakeImg, category: "Mocktail", veg: true, rating: 4.6 },
+  { name: "Water Melon", price: 60, img: shakeImg, category: "Mocktail", veg: true, rating: 4.5 },
+  { name: "Green Apple", price: 60, img: shakeImg, category: "Mocktail", veg: true, rating: 4.5 },
+  { name: "Orange", price: 60, img: shakeImg, category: "Mocktail", veg: true, rating: 4.5 },
+  { name: "Virgin Mojito", price: 80, img: shakeImg, category: "Mocktail", veg: true, rating: 4.7 },
+
+  // Fries
+  { name: "Plain Fries", price: 70, img: sandwichImg, category: "Fries", veg: true, rating: 4.5 },
+  { name: "Masala Fries", price: 80, img: sandwichImg, category: "Fries", veg: true, rating: 4.6 },
+  { name: "Cheese Loaded Fries", price: 100, img: sandwichImg, category: "Fries", veg: true, rating: 4.8, popular: true },
+  { name: "Jelopeno Fries", price: 100, img: sandwichImg, category: "Fries", veg: true, spicy: true, rating: 4.6 },
+  { name: "Pizza Pocket", price: 100, img: pizzaImg, category: "Fries", veg: true, rating: 4.6 },
+  { name: "Chicken Finger", price: 140, img: sandwichImg, category: "Fries", veg: false, rating: 4.7 },
+
+  // Dip
+  { name: "Cheese Dip", price: 30, img: sandwichImg, category: "Dip", veg: true, rating: 4.5 },
+  { name: "Tandoori Dip", price: 30, img: sandwichImg, category: "Dip", veg: true, rating: 4.5 },
+  { name: "Chilli Garlic Dip", price: 30, img: sandwichImg, category: "Dip", veg: true, spicy: true, rating: 4.6 },
+  { name: "Peri-Peri Dip", price: 30, img: sandwichImg, category: "Dip", veg: true, spicy: true, rating: 4.6 },
+
+  // Ice-Cream Shakes (Large price)
+  { name: "Vanilla Shake", price: 100, img: shakeImg, category: "Shakes", veg: true, rating: 4.6 },
+  { name: "Strawberry Shake", price: 100, img: shakeImg, category: "Shakes", veg: true, rating: 4.7 },
+  { name: "Butter Scotch Shake", price: 100, img: shakeImg, category: "Shakes", veg: true, rating: 4.7 },
+  { name: "Black Current Shake", price: 100, img: shakeImg, category: "Shakes", veg: true, rating: 4.6 },
+  { name: "Cold Coffee", price: 100, img: shakeImg, category: "Shakes", veg: true, rating: 4.8, popular: true },
+  { name: "Rose Shake", price: 100, img: shakeImg, category: "Shakes", veg: true, rating: 4.5 },
+  { name: "Pineapple Shake", price: 100, img: shakeImg, category: "Shakes", veg: true, rating: 4.5 },
+  { name: "Mango Shake", price: 100, img: shakeImg, category: "Shakes", veg: true, rating: 4.7 },
+  { name: "Banana Shake", price: 100, img: shakeImg, category: "Shakes", veg: true, rating: 4.5 },
+  { name: "Lichi Shake", price: 100, img: shakeImg, category: "Shakes", veg: true, rating: 4.6 },
+  { name: "Chocolate Shake", price: 100, img: shakeImg, category: "Shakes", veg: true, rating: 4.8 },
+
+  // Premium Thick Shakes
+  { name: "Chocolate Hazelnut Shake", price: 130, img: shakeImg, category: "Premium Shakes", veg: true, rating: 4.8, popular: true },
+  { name: "Mint Oreo Shake", price: 130, img: shakeImg, category: "Premium Shakes", veg: true, rating: 4.7 },
+  { name: "Chocolate Peanut Butter Shake", price: 130, img: shakeImg, category: "Premium Shakes", veg: true, rating: 4.8 },
+  { name: "Choco Strawberry Shake", price: 130, img: shakeImg, category: "Premium Shakes", veg: true, rating: 4.7 },
+  { name: "Tutti Frutti Shake", price: 130, img: shakeImg, category: "Premium Shakes", veg: true, rating: 4.6 },
+  { name: "Choco Mocha Shake", price: 130, img: shakeImg, category: "Premium Shakes", veg: true, rating: 4.7 },
+  { name: "Bubblegum Shake", price: 130, img: shakeImg, category: "Premium Shakes", veg: true, rating: 4.6 },
+  { name: "Kit Kat Shake", price: 130, img: shakeImg, category: "Premium Shakes", veg: true, rating: 4.8 },
+  { name: "Choco Chip Shake", price: 130, img: shakeImg, category: "Premium Shakes", veg: true, rating: 4.7 },
+  { name: "Choco Oreo Shake", price: 130, img: shakeImg, category: "Premium Shakes", veg: true, rating: 4.8, popular: true },
+  { name: "Belgian Brownie Shake", price: 140, img: shakeImg, category: "Premium Shakes", veg: true, rating: 4.8 },
+  { name: "Dark Oreo Shake", price: 140, img: shakeImg, category: "Premium Shakes", veg: true, rating: 4.7 },
+  { name: "Hazelnut Coffee Shake", price: 140, img: shakeImg, category: "Premium Shakes", veg: true, rating: 4.7 },
+  { name: "Red Velvet Shake", price: 140, img: shakeImg, category: "Premium Shakes", veg: true, rating: 4.8 },
+
+  // Sundae
+  { name: "Brownie with Chocolate Sos", price: 70, img: sundaeImg, category: "Sundae", veg: true, rating: 4.7 },
+  { name: "Brownie Sundae", price: 90, img: sundaeImg, category: "Sundae", veg: true, rating: 4.8, popular: true },
+  { name: "Hot Chocolate Fudge", price: 90, img: sundaeImg, category: "Sundae", veg: true, rating: 4.9, popular: true },
+  { name: "Strawberry Sundae", price: 90, img: sundaeImg, category: "Sundae", veg: true, rating: 4.7 },
+  { name: "Blueberry Sundae", price: 90, img: sundaeImg, category: "Sundae", veg: true, rating: 4.7 },
+  { name: "Mango Punch", price: 90, img: sundaeImg, category: "Sundae", veg: true, rating: 4.6 },
+  { name: "Pineapple Sundae", price: 90, img: sundaeImg, category: "Sundae", veg: true, rating: 4.6 },
+  { name: "Fruit Sundae", price: 100, img: sundaeImg, category: "Sundae", veg: true, rating: 4.7 },
+  { name: "Carmel Mocha Sundae", price: 100, img: sundaeImg, category: "Sundae", veg: true, rating: 4.8 },
+  { name: "Kit-Kat Sundae", price: 100, img: sundaeImg, category: "Sundae", veg: true, rating: 4.8 },
+  { name: "Chocolate Devine", price: 100, img: sundaeImg, category: "Sundae", veg: true, rating: 4.8 },
+  { name: "Grand Spl Sundae", price: 150, img: sundaeImg, category: "Sundae", veg: true, rating: 4.9, popular: true },
 
   // Combos
-  { name: "Grand Combo", price: 18.9, desc: "Signature burger + fries + shake.", img: burgerImg, category: "Combos", veg: false, rating: 4.9, popular: true },
-  { name: "Pizza Party Combo", price: 24.9, desc: "Any large pizza + 2 drinks.", img: pizzaImg, category: "Combos", veg: true, rating: 4.7 },
-  { name: "Family Feast", price: 39.9, desc: "2 burgers, 1 pizza, 2 shakes, fries.", img: burgerImg, category: "Combos", veg: false, rating: 4.8 },
-
-  // Extras
-  { name: "Loaded Fries", price: 5.5, desc: "Cheese, bacon, jalapeños, sauce.", img: sandwichImg, category: "Extras", veg: false, rating: 4.7 },
-  { name: "Onion Rings", price: 4.5, desc: "Beer-battered, crispy, golden.", img: sandwichImg, category: "Extras", veg: true, rating: 4.5 },
-  { name: "Mozzarella Sticks", price: 5.9, desc: "With marinara dipping sauce.", img: sandwichImg, category: "Extras", veg: true, rating: 4.6 },
+  { name: "Double Treat Combo", price: 199, img: burgerImg, category: "Combos", veg: true, rating: 4.8, popular: true, desc: "Includes topping pizza" },
+  { name: "Burger Combo Value Meal", price: 149, img: burgerImg, category: "Combos", veg: true, rating: 4.7, popular: true, desc: "Veg cheese burger + fries + drink" },
+  { name: "Jhatpat Combo", price: 99, img: burgerImg, category: "Combos", veg: true, rating: 4.6, desc: "Veg burger + mint mojito" },
 ];
 
-const categories = ["All", "Burgers", "Pizza", "Sandwiches", "Wraps", "Shakes", "Sundaes", "Beverages", "Combos", "Extras"];
+const categories = [
+  "All", "Burger", "Grilled Burger", "Chicken Burgers", "Wrap Roll",
+  "Grilled Sandwich", "Garlic Bread", "Pizza", "Chicken Pizza",
+  "Mocktail", "Fries", "Dip", "Shakes", "Premium Shakes", "Sundae", "Combos",
+];
+
+const INR = (n: number) => `₹${n.toFixed(0)}`;
 
 function MenuPage() {
   const [cat, setCat] = useState("All");
   const [q, setQ] = useState("");
   const [cart, setCart] = useState<Record<string, number>>({});
+  const [cartOpen, setCartOpen] = useState(false);
+  const [placed, setPlaced] = useState(false);
 
   const filtered = useMemo(
     () =>
@@ -94,7 +206,14 @@ function MenuPage() {
     [cat, q]
   );
 
-  const cartCount = Object.values(cart).reduce((a, b) => a + b, 0);
+  const priceOf = (name: string) => items.find((i) => i.name === name)?.price ?? 0;
+  const cartLines = Object.entries(cart).map(([name, qty]) => ({ name, qty, price: priceOf(name), total: priceOf(name) * qty }));
+  const cartCount = cartLines.reduce((a, l) => a + l.qty, 0);
+  const subtotal = cartLines.reduce((a, l) => a + l.total, 0);
+  const tax = Math.round(subtotal * 0.05); // 5% GST
+  const delivery = subtotal > 0 && subtotal < 300 ? 30 : 0;
+  const grandTotal = subtotal + tax + delivery;
+
   const add = (name: string) => setCart((c) => ({ ...c, [name]: (c[name] ?? 0) + 1 }));
   const sub = (name: string) => setCart((c) => {
     const n = (c[name] ?? 0) - 1;
@@ -102,10 +221,10 @@ function MenuPage() {
     void _;
     return n <= 0 ? rest : { ...c, [name]: n };
   });
+  const clearCart = () => setCart({});
 
   return (
     <main className="relative min-h-screen bg-background pt-32 text-white">
-      {/* backdrop */}
       <div className="pointer-events-none absolute inset-x-0 top-0 h-[600px] opacity-70" style={{ background: "var(--gradient-hero)" }} />
 
       <div className="relative mx-auto max-w-7xl px-6">
@@ -115,7 +234,7 @@ function MenuPage() {
             The full <span className="text-gradient-fire">Grand</span> menu.
           </h1>
           <p className="mx-auto mt-4 max-w-xl text-white/60">
-            Every item is made to order with premium ingredients. Filter, search and add to cart.
+            Every item made to order with premium ingredients. Filter, search and add to cart.
           </p>
         </motion.div>
 
@@ -139,9 +258,7 @@ function MenuPage() {
               key={c}
               onClick={() => setCat(c)}
               className={`relative rounded-full px-5 py-2.5 text-sm font-semibold transition ${
-                cat === c
-                  ? "text-white shadow-glow"
-                  : "text-white/60 hover:text-white glass"
+                cat === c ? "text-white shadow-glow" : "text-white/60 hover:text-white glass"
               }`}
               style={cat === c ? { background: "var(--gradient-fire)" } : undefined}
             >
@@ -151,7 +268,7 @@ function MenuPage() {
         </div>
 
         {/* Grid */}
-        <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-14 grid gap-6 pb-40 sm:grid-cols-2 lg:grid-cols-3">
           <AnimatePresence mode="popLayout">
             {filtered.map((it) => {
               const qty = cart[it.name] ?? 0;
@@ -198,10 +315,10 @@ function MenuPage() {
                     <div className="flex items-start justify-between gap-4">
                       <h3 className="font-display text-lg font-bold text-white">{it.name}</h3>
                       <div className="whitespace-nowrap font-display text-lg font-bold text-accent">
-                        ${it.price.toFixed(2)}
+                        {INR(it.price)}
                       </div>
                     </div>
-                    <p className="mt-2 text-sm text-white/60">{it.desc}</p>
+                    {it.desc && <p className="mt-2 text-sm text-white/60">{it.desc}</p>}
 
                     <div className="mt-auto pt-5">
                       {qty === 0 ? (
@@ -232,31 +349,133 @@ function MenuPage() {
         </div>
 
         {filtered.length === 0 && (
-          <div className="mt-20 text-center text-white/50">
-            No dishes match your search.
-          </div>
+          <div className="mt-20 text-center text-white/50">No dishes match your search.</div>
         )}
       </div>
 
-      {/* floating cart */}
+      {/* Floating "View Cart" button — appears after adding to cart */}
       <AnimatePresence>
-        {cartCount > 0 && (
-          <motion.div
-            initial={{ y: 100, opacity: 0 }}
+        {cartCount > 0 && !cartOpen && (
+          <motion.button
+            initial={{ y: 120, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            exit={{ y: 100, opacity: 0 }}
-            className="fixed bottom-6 left-1/2 z-40 -translate-x-1/2"
+            exit={{ y: 120, opacity: 0 }}
+            onClick={() => setCartOpen(true)}
+            className="fixed bottom-6 left-1/2 z-40 -translate-x-1/2 flex items-center gap-4 rounded-full bg-[image:var(--gradient-fire)] px-6 py-3.5 shadow-glow hover:scale-105 transition"
           >
-            <div className="flex items-center gap-4 rounded-full glass px-4 py-2 pl-6 shadow-glow">
-              <div className="flex items-center gap-2 text-sm text-white">
-                <ShoppingBag className="h-4 w-4 text-accent" />
-                <span className="font-semibold">{cartCount} item{cartCount > 1 ? "s" : ""}</span>
-              </div>
-              <button className="btn-glow hover:btn-glow-hover rounded-full px-5 py-2 text-sm font-semibold">
-                Checkout
-              </button>
+            <div className="flex items-center gap-2 text-white">
+              <ShoppingBag className="h-5 w-5" />
+              <span className="font-semibold">View Cart</span>
+              <span className="rounded-full bg-black/30 px-2.5 py-0.5 text-xs font-bold">
+                {cartCount} item{cartCount > 1 ? "s" : ""}
+              </span>
             </div>
-          </motion.div>
+            <div className="h-6 w-px bg-white/40" />
+            <span className="font-display text-lg font-bold text-white">{INR(subtotal)}</span>
+          </motion.button>
+        )}
+      </AnimatePresence>
+
+      {/* Cart / Billing Drawer */}
+      <AnimatePresence>
+        {cartOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              onClick={() => setCartOpen(false)}
+              className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm"
+            />
+            <motion.aside
+              initial={{ x: "100%" }} animate={{ x: 0 }} exit={{ x: "100%" }}
+              transition={{ type: "spring", damping: 30, stiffness: 260 }}
+              className="fixed inset-y-0 right-0 z-50 flex w-full max-w-md flex-col bg-[oklch(0.11_0.01_20)] border-l border-white/10 shadow-2xl"
+            >
+              <div className="flex items-center justify-between border-b border-white/10 p-5">
+                <div>
+                  <div className="text-xs uppercase tracking-[0.3em] text-accent">Your order</div>
+                  <h3 className="font-display text-2xl font-bold text-white">Billing Details</h3>
+                </div>
+                <button onClick={() => setCartOpen(false)} className="grid h-10 w-10 place-items-center rounded-full glass text-white hover:bg-white/10">
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+
+              {placed ? (
+                <div className="flex flex-1 flex-col items-center justify-center gap-4 p-8 text-center">
+                  <div className="grid h-20 w-20 place-items-center rounded-full bg-[image:var(--gradient-fire)] shadow-glow">
+                    <Check className="h-10 w-10 text-white" />
+                  </div>
+                  <h4 className="font-display text-3xl font-black text-white">Order Placed! 🔥</h4>
+                  <p className="max-w-xs text-white/70">Your delicious food is being prepared. Estimated delivery in 25–30 minutes.</p>
+                  <button
+                    onClick={() => { setPlaced(false); clearCart(); setCartOpen(false); }}
+                    className="btn-glow hover:btn-glow-hover mt-4 rounded-full px-6 py-3 text-sm font-semibold"
+                  >
+                    Continue Ordering
+                  </button>
+                </div>
+              ) : (
+                <>
+                  <div className="flex-1 overflow-y-auto p-5">
+                    <div className="space-y-3">
+                      {cartLines.map((l) => (
+                        <div key={l.name} className="flex items-center gap-3 rounded-2xl glass p-3">
+                          <img src={items.find((i) => i.name === l.name)?.img} alt="" className="h-14 w-14 rounded-xl object-cover" />
+                          <div className="flex-1 min-w-0">
+                            <div className="truncate font-semibold text-white">{l.name}</div>
+                            <div className="text-xs text-white/50">{INR(l.price)} × {l.qty}</div>
+                          </div>
+                          <div className="flex items-center gap-2 rounded-full bg-white/5 p-1">
+                            <button onClick={() => sub(l.name)} className="grid h-7 w-7 place-items-center rounded-full bg-white/10 hover:bg-white/20"><Minus className="h-3 w-3" /></button>
+                            <span className="min-w-[1.5rem] text-center text-sm font-bold">{l.qty}</span>
+                            <button onClick={() => add(l.name)} className="grid h-7 w-7 place-items-center rounded-full bg-white/10 hover:bg-white/20"><Plus className="h-3 w-3" /></button>
+                          </div>
+                          <div className="w-16 text-right font-display font-bold text-accent">{INR(l.total)}</div>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Billing summary */}
+                    <div className="mt-6 rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+                      <h4 className="font-display text-lg font-bold text-white">Bill Summary</h4>
+                      <div className="mt-4 space-y-2 text-sm">
+                        <Row label={`Item total (${cartCount} item${cartCount > 1 ? "s" : ""})`} value={INR(subtotal)} />
+                        <Row label="GST (5%)" value={INR(tax)} />
+                        <Row label="Delivery fee" value={delivery === 0 ? "FREE" : INR(delivery)} accent={delivery === 0} />
+                        {subtotal > 0 && subtotal < 300 && (
+                          <div className="mt-2 rounded-lg bg-accent/10 px-3 py-2 text-xs text-accent">
+                            Add {INR(300 - subtotal)} more for free delivery!
+                          </div>
+                        )}
+                      </div>
+                      <div className="mt-4 border-t border-white/10 pt-4 flex items-center justify-between">
+                        <span className="font-display text-lg font-bold text-white">Grand Total</span>
+                        <span className="font-display text-2xl font-black text-gradient-fire">{INR(grandTotal)}</span>
+                      </div>
+                    </div>
+
+                    {/* Delivery info */}
+                    <div className="mt-4 rounded-2xl glass p-4 text-xs text-white/60">
+                      <div className="flex items-center gap-2"><MapPin className="h-4 w-4 text-accent" /> Shop No 1, Plot No 18, Gulaab Bagh, Nawada Metro Station</div>
+                      <div className="mt-1 flex items-center gap-2"><Phone className="h-4 w-4 text-accent" /> +91 70656 56537</div>
+                    </div>
+                  </div>
+
+                  <div className="border-t border-white/10 p-5">
+                    <button
+                      onClick={() => setPlaced(true)}
+                      className="btn-glow hover:btn-glow-hover flex w-full items-center justify-center gap-2 rounded-full px-6 py-4 text-base font-bold"
+                    >
+                      Place Order · {INR(grandTotal)}
+                    </button>
+                    <button onClick={clearCart} className="mt-3 w-full text-center text-xs text-white/50 hover:text-white">
+                      Clear cart
+                    </button>
+                  </div>
+                </>
+              )}
+            </motion.aside>
+          </>
         )}
       </AnimatePresence>
 
@@ -264,5 +483,14 @@ function MenuPage() {
         <SiteFooter />
       </div>
     </main>
+  );
+}
+
+function Row({ label, value, accent }: { label: string; value: string; accent?: boolean }) {
+  return (
+    <div className="flex items-center justify-between">
+      <span className="text-white/60">{label}</span>
+      <span className={`font-semibold ${accent ? "text-green-400" : "text-white"}`}>{value}</span>
+    </div>
   );
 }

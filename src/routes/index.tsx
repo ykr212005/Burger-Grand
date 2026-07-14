@@ -28,12 +28,12 @@ export const Route = createFileRoute("/")({
 });
 
 const stories = [
-  { id: "burger",  img: burgerImg,  title: "The Signature Burger",  desc: "Double-stack Angus beef, aged cheddar, smoky bacon jam, brioche bun toasted in butter.",  price: "$12.90", tone: "from-[oklch(0.58_0.22_27)] to-[oklch(0.72_0.19_55)]" },
-  { id: "pizza",   img: pizzaImg,   title: "Wood-Fired Margherita", desc: "Stone-baked at 480°C. San Marzano tomato, fior di latte, torn basil, extra virgin olive oil.",   price: "$14.50", tone: "from-[oklch(0.72_0.19_55)] to-[oklch(0.86_0.17_88)]" },
-  { id: "sandwich",img: sandwichImg,title: "The Grand Club",        desc: "Grilled chicken, crispy bacon, aged cheddar, garden vegetables between toasted sourdough.",     price: "$10.50", tone: "from-[oklch(0.86_0.17_88)] to-[oklch(0.72_0.19_55)]" },
-  { id: "wrap",    img: wrapImg,    title: "Mexican Fire Wrap",     desc: "Spiced chicken, chipotle mayo, avocado, cheddar, romaine and salsa rolled in a soft tortilla.",price: "$9.90",  tone: "from-[oklch(0.72_0.19_55)] to-[oklch(0.58_0.22_27)]" },
-  { id: "shake",   img: shakeImg,   title: "Oreo Storm Shake",      desc: "Vanilla soft-serve churned with Oreo cookies, whipped cream, chocolate drizzle.",              price: "$6.50",  tone: "from-[oklch(0.58_0.22_27)] to-[oklch(0.86_0.17_88)]" },
-  { id: "sundae",  img: sundaeImg,  title: "Hot Fudge Sundae",      desc: "Layers of vanilla ice cream, roasted nuts, hot fudge, whipped cream and a maraschino cherry.",price: "$7.20",  tone: "from-[oklch(0.86_0.17_88)] to-[oklch(0.58_0.22_27)]" },
+  { id: "burger",  img: burgerImg,  title: "Grand Spl Burger",       desc: "Our signature stack — loaded patty, cheese, fresh veggies, house sauce in a toasted bun.",       price: "₹90",  tone: "from-[oklch(0.58_0.22_27)] to-[oklch(0.72_0.19_55)]" },
+  { id: "pizza",   img: pizzaImg,   title: "Grand Spl Pizza",        desc: "Stone-baked crust loaded with paneer, capsicum, corn, olives and molten mozzarella.",           price: "₹220", tone: "from-[oklch(0.72_0.19_55)] to-[oklch(0.86_0.17_88)]" },
+  { id: "sandwich",img: sandwichImg,title: "Grand Spl Sandwich",     desc: "Grilled veggie patty, cheese, coleslaw and garden fresh vegetables between crisp bread.",       price: "₹100", tone: "from-[oklch(0.86_0.17_88)] to-[oklch(0.72_0.19_55)]" },
+  { id: "wrap",    img: wrapImg,    title: "Paneer Wrap",            desc: "Spiced paneer, mint mayo, onions and fresh salad rolled in a soft tortilla.",                   price: "₹100", tone: "from-[oklch(0.72_0.19_55)] to-[oklch(0.58_0.22_27)]" },
+  { id: "shake",   img: shakeImg,   title: "Chocolate Oreo Shake",   desc: "Thick chocolate shake blended with Oreo cookies, topped with whipped cream and drizzle.",       price: "₹130", tone: "from-[oklch(0.58_0.22_27)] to-[oklch(0.86_0.17_88)]" },
+  { id: "sundae",  img: sundaeImg,  title: "Hot Chocolate Fudge",    desc: "Warm chocolate fudge over vanilla ice cream, nuts, whipped cream and a cherry.",                price: "₹90",  tone: "from-[oklch(0.86_0.17_88)] to-[oklch(0.58_0.22_27)]" },
 ];
 
 const featureImages = [burgerImg, pizzaImg, sandwichImg, wrapImg, shakeImg, sundaeImg];
@@ -362,15 +362,15 @@ function WhyChoose() {
 
 /* ---------------- SIGNATURE ---------------- */
 const signature = [
-  { name: "Signature Burger", img: burgerImg, price: 12.9, rating: 4.9, tag: "Best Seller" },
-  { name: "Margherita Pizza", img: pizzaImg, price: 14.5, rating: 4.8, tag: "Classic" },
-  { name: "Loaded Veg Pizza", img: pizzaImg, price: 15.9, rating: 4.7 },
-  { name: "Chicken Burger", img: burgerImg, price: 10.9, rating: 4.8, tag: "Popular" },
-  { name: "Club Sandwich", img: sandwichImg, price: 10.5, rating: 4.7 },
-  { name: "Mexican Wrap", img: wrapImg, price: 9.9, rating: 4.6 },
-  { name: "Oreo Shake", img: shakeImg, price: 6.5, rating: 4.9, tag: "Chef's Pick" },
-  { name: "Chocolate Shake", img: shakeImg, price: 6.2, rating: 4.7 },
-  { name: "Hot Fudge Sundae", img: sundaeImg, price: 7.2, rating: 4.9 },
+  { name: "Grand Spl Burger", img: burgerImg, price: 90, rating: 4.9, tag: "Best Seller" },
+  { name: "Grand Spl Pizza", img: pizzaImg, price: 220, rating: 4.9, tag: "Chef's Pick" },
+  { name: "Loaded Paneer Pizza", img: pizzaImg, price: 190, rating: 4.8 },
+  { name: "Cheese Chicken Burger", img: burgerImg, price: 90, rating: 4.8, tag: "Popular" },
+  { name: "Grand Spl Sandwich", img: sandwichImg, price: 100, rating: 4.8 },
+  { name: "Chicken Wrap", img: wrapImg, price: 100, rating: 4.8 },
+  { name: "Choco Oreo Shake", img: shakeImg, price: 130, rating: 4.8, tag: "Premium" },
+  { name: "Cold Coffee", img: shakeImg, price: 100, rating: 4.8 },
+  { name: "Hot Chocolate Fudge", img: sundaeImg, price: 90, rating: 4.9 },
 ];
 
 function Signature() {
@@ -415,11 +415,11 @@ function Signature() {
                 <div className="p-5">
                   <div className="flex items-start justify-between gap-4">
                     <h3 className="font-display text-lg font-bold text-white">{s.name}</h3>
-                    <div className="font-display text-lg font-bold text-accent">${s.price.toFixed(2)}</div>
+                    <div className="font-display text-lg font-bold text-accent">₹{s.price}</div>
                   </div>
-                  <button className="mt-4 flex w-full items-center justify-center gap-2 rounded-full bg-white/5 py-2.5 text-sm font-semibold text-white transition hover:bg-[image:var(--gradient-fire)] hover:shadow-glow">
+                  <Link to="/menu" className="mt-4 flex w-full items-center justify-center gap-2 rounded-full bg-white/5 py-2.5 text-sm font-semibold text-white transition hover:bg-[image:var(--gradient-fire)] hover:shadow-glow">
                     <Plus className="h-4 w-4" /> Add to cart
-                  </button>
+                  </Link>
                 </div>
               </div>
             </TiltCard>
@@ -629,16 +629,16 @@ function Contact() {
             </p>
 
             <ul className="mt-10 space-y-6">
-              <ContactRow icon={MapPin} label="Address" value="221B Flavor Street, Grand Plaza, City Center" />
-              <ContactRow icon={Phone} label="Phone" value="+1 (555) 246-8100" />
+              <ContactRow icon={MapPin} label="Address" value="Shop No 1, Plot No 18, Gulaab Bagh, Nawada Metro Station, New Delhi" />
+              <ContactRow icon={Phone} label="Phone" value="+91 70656 56537" />
               <ContactRow icon={Mail} label="Email" value="hello@burgergrand.com" />
               <ContactRow icon={Clock} label="Hours" value="Mon–Sun · 11:00 AM — 12:00 AM" />
             </ul>
 
             <div className="mt-10 overflow-hidden rounded-3xl glass">
               <iframe
-                title="Burger Grand location"
-                src="https://www.google.com/maps?q=Times+Square+New+York&output=embed"
+                title="Burger Grand — Nawada location"
+                src="https://www.google.com/maps?q=Burger+Grand+Nawada+Metro+Station+Gulaab+Bagh&output=embed"
                 className="h-64 w-full grayscale-[30%]"
                 loading="lazy"
               />
