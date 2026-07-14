@@ -87,7 +87,7 @@ function Hero() {
         playsInline
         preload="auto"
         aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10 h-full w-full object-contain object-top"
+        className="pointer-events-none absolute inset-0 h-full w-full object-contain object-top"
       />
 
       {/* steam particles */}
