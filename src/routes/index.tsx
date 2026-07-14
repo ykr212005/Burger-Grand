@@ -415,7 +415,7 @@ function Signature() {
                 <div className="p-5">
                   <div className="flex items-start justify-between gap-4">
                     <h3 className="font-display text-lg font-bold text-white">{s.name}</h3>
-                    <div className="font-display text-lg font-bold text-accent">${s.price.toFixed(2)}</div>
+                    <div className="font-display text-lg font-bold text-accent">₹{s.price}</div>
                   </div>
                   <button className="mt-4 flex w-full items-center justify-center gap-2 rounded-full bg-white/5 py-2.5 text-sm font-semibold text-white transition hover:bg-[image:var(--gradient-fire)] hover:shadow-glow">
                     <Plus className="h-4 w-4" /> Add to cart
