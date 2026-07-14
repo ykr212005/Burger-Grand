@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 
 import heroBg from "@/assets/hero-bg.jpg";
+import heroVideo from "@/assets/hero-bg.mp4.asset.json";
 import burgerImg from "@/assets/burger.jpg";
 import pizzaImg from "@/assets/pizza.jpg";
 import sandwichImg from "@/assets/sandwich.jpg";
@@ -76,15 +77,19 @@ function Hero() {
       className="relative flex min-h-screen items-center overflow-hidden pt-28"
       style={{ background: "var(--gradient-hero)" }}
     >
-      {/* bg image */}
-      <img
-        src={heroBg}
-        alt=""
+      {/* bg video */}
+      <video
+        src={heroVideo.url}
+        poster={heroBg}
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="auto"
         aria-hidden
-        className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-40 mix-blend-screen"
-        width={1920}
-        height={1200}
+        className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-50"
       />
+      <div className="pointer-events-none absolute inset-0 bg-black/50" />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,transparent,oklch(0.09_0.005_20)_75%)]" />
 
       {/* steam particles */}
