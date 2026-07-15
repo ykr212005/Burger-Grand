@@ -60,8 +60,6 @@ function Hero() {
   const wrapRef = useRef<HTMLDivElement>(null);
   const mx = useMotionValue(0);
   const my = useMotionValue(0);
-  const smx = useSpring(mx, { stiffness: 60, damping: 15 });
-  const smy = useSpring(my, { stiffness: 60, damping: 15 });
 
   const onMove = (e: React.MouseEvent) => {
     const r = wrapRef.current?.getBoundingClientRect();
@@ -70,14 +68,15 @@ function Hero() {
     my.set((e.clientY - r.top - r.height / 2) / r.height);
   };
 
+
   return (
     <section
       ref={wrapRef}
       onMouseMove={onMove}
-      className="relative flex min-h-screen items-center overflow-hidden pt-28"
+      className="relative flex min-h-[100svh] items-center overflow-hidden pt-28"
       style={{ background: "var(--gradient-hero)" }}
     >
-      {/* bg video — sits behind the headline area */}
+      {/* Background video — covers hero on all devices, sits behind text */}
       <video
         src={heroVideo.url}
         poster={heroBg}
@@ -87,11 +86,16 @@ function Hero() {
         playsInline
         preload="auto"
         aria-hidden
-        className="pointer-events-none absolute inset-0 h-full w-full object-contain object-top"
+        className="pointer-events-none absolute inset-0 -z-10 h-full w-full object-cover"
+      />
+      {/* Soft vignette from bottom for text legibility (no dark filter over video) */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-1/2 bg-gradient-to-t from-black/70 via-black/20 to-transparent"
       />
 
       {/* steam particles */}
-      {[...Array(10)].map((_, i) => (
+      {[...Array(8)].map((_, i) => (
         <span
           key={i}
           className="pointer-events-none absolute bottom-0 h-24 w-24 rounded-full bg-white/10 blur-2xl"
@@ -102,12 +106,12 @@ function Hero() {
         />
       ))}
 
-      <div className="relative z-10 mx-auto grid w-full max-w-7xl gap-10 px-6 lg:grid-cols-2 lg:gap-8">
+      <div className="relative z-10 mx-auto flex w-full max-w-7xl px-6">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="flex flex-col justify-center"
+          className="flex max-w-3xl flex-col justify-center pb-16"
         >
           <span className="inline-flex w-fit items-center gap-2 rounded-full glass px-4 py-1.5 text-xs uppercase tracking-widest text-accent">
             <Sparkles className="h-3.5 w-3.5" /> Premium kitchen · Since 2014
@@ -117,7 +121,7 @@ function Hero() {
             Fresh. Hot. <br />
             <span className="text-gradient-fire">Loaded With Flavor.</span>
           </h1>
-          <p className="mt-6 max-w-xl text-base text-white/70 sm:text-lg">
+          <p className="mt-6 max-w-xl text-base text-white/80 sm:text-lg drop-shadow-[0_2px_10px_rgba(0,0,0,0.7)]">
             Handcrafted burgers, wood-fired pizzas, crispy sandwiches, fresh wraps,
             thick shakes and indulgent sundaes — made with premium ingredients,
             served with fire.
@@ -139,81 +143,23 @@ function Hero() {
             </a>
           </div>
 
-          <div className="mt-12 flex items-center gap-8 text-sm text-white/60">
+          <div className="mt-12 flex items-center gap-8 text-sm text-white/70">
             <div>
               <div className="font-display text-2xl font-bold text-white">4.9★</div>
               <div>Rating</div>
             </div>
-            <div className="h-8 w-px bg-white/10" />
+            <div className="h-8 w-px bg-white/20" />
             <div>
               <div className="font-display text-2xl font-bold text-white">200k+</div>
               <div>Meals served</div>
             </div>
-            <div className="h-8 w-px bg-white/10" />
+            <div className="h-8 w-px bg-white/20" />
             <div>
               <div className="font-display text-2xl font-bold text-white">25 min</div>
               <div>Avg. delivery</div>
             </div>
           </div>
         </motion.div>
-
-        {/* Floating food composition */}
-        <div className="relative h-[520px] sm:h-[600px] lg:h-[640px]">
-          {/* central glow */}
-          <div
-            className="absolute left-1/2 top-1/2 h-[420px] w-[420px] -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl opacity-60"
-            style={{ background: "conic-gradient(from 90deg, oklch(0.58 0.22 27 / 0.5), oklch(0.72 0.19 55 / 0.4), oklch(0.86 0.17 88 / 0.5), oklch(0.58 0.22 27 / 0.5))" }}
-          />
-          {/* rotating ring */}
-          <div className="absolute inset-0 grid place-items-center">
-            <div className="relative h-[440px] w-[440px] sm:h-[520px] sm:w-[520px] animate-spin-slow rounded-full border border-white/10">
-              <div className="absolute inset-4 rounded-full border border-white/5" />
-            </div>
-          </div>
-
-          {/* main hero food */}
-          <motion.img
-            src={burgerImg}
-            alt="Signature Burger"
-            width={800}
-            height={800}
-            style={{ x: useTransform(smx, (v) => v * 30), y: useTransform(smy, (v) => v * 30) }}
-            className="absolute left-1/2 top-1/2 h-[340px] w-[340px] sm:h-[400px] sm:w-[400px] -translate-x-1/2 -translate-y-1/2 object-contain drop-shadow-[0_30px_60px_oklch(0.58_0.22_27/0.55)] animate-float"
-          />
-
-          {/* orbit chips */}
-          {[
-            { img: pizzaImg,    top: "6%",   left: "70%", size: 120, d: 0 },
-            { img: shakeImg,    top: "62%",  left: "82%", size: 110, d: 0.6 },
-            { img: sundaeImg,   top: "80%",  left: "8%",  size: 120, d: 1.1 },
-            { img: sandwichImg, top: "18%",  left: "-2%", size: 100, d: 1.6 },
-            { img: wrapImg,     top: "48%",  left: "-6%", size: 100, d: 2.1 },
-          ].map((c, i) => (
-            <motion.div
-              key={i}
-              style={{
-                top: c.top, left: c.left,
-                x: useTransform(smx, (v) => v * (i % 2 ? -40 : 40)),
-                y: useTransform(smy, (v) => v * (i % 2 ? -40 : 40)),
-              }}
-              className="absolute"
-            >
-              <div
-                className="grid place-items-center rounded-3xl glass p-2 shadow-glow"
-                style={{ width: c.size, height: c.size, animation: `float-y ${5 + (i % 3)}s ease-in-out ${c.d}s infinite` }}
-              >
-                <img
-                  src={c.img}
-                  alt=""
-                  width={200}
-                  height={200}
-                  loading="lazy"
-                  className="h-full w-full rounded-2xl object-cover"
-                />
-              </div>
-            </motion.div>
-          ))}
-        </div>
       </div>
     </section>
   );
@@ -461,22 +407,30 @@ function TiltCard({ children }: { children: React.ReactNode }) {
 
 /* ---------------- REVIEWS ---------------- */
 const reviews = [
+  { name: "Ved Prakash", text: "One of the hidden gems. Order the veg cheese burger and you'll be surprised — better than mainstream franchises. Don't take my word for it, just try one and feel the crisp. Tip: try the brownie too!", rating: 5, verified: true, source: "Google" },
   { name: "Amara J.", text: "The signature burger is the best I've had in the city. Cinematic vibes, cinematic flavor.", rating: 5 },
   { name: "Diego R.", text: "Wood-fired pizza with a crust that's crisp and chewy. Perfection.", rating: 5 },
   { name: "Priya S.", text: "Delivery arrived hot and beautifully packed. The Oreo shake stole the show.", rating: 5 },
   { name: "Marcus O.", text: "Absolutely premium. It felt like fine dining ordered to my couch.", rating: 5 },
   { name: "Léa K.", text: "The sundae was theatre in a glass. My kids won't stop asking to go back.", rating: 5 },
-  { name: "Yuki T.", text: "Consistent quality every visit. The staff care, and you can taste it.", rating: 5 },
 ];
 
 function Reviews() {
   return (
     <section id="reviews" className="relative overflow-hidden py-32">
       <div className="mx-auto max-w-7xl px-6 text-center">
-        <span className="text-xs uppercase tracking-[0.3em] text-accent">Reviews</span>
+        <span className="text-xs uppercase tracking-[0.3em] text-accent">Official Reviews</span>
         <h2 className="mt-4 font-display text-4xl font-black sm:text-5xl md:text-6xl">
           Loved by <span className="text-gradient-fire">thousands</span>.
         </h2>
+        <a
+          href="https://share.google/1Jdm6PHgAdQhy8l6e"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-4 inline-flex items-center gap-2 rounded-full glass px-4 py-2 text-sm font-semibold text-white hover:bg-white/10"
+        >
+          <Star className="h-4 w-4 fill-accent text-accent" /> Read reviews on Google
+        </a>
       </div>
 
       <div className="mt-16 overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_15%,#000_85%,transparent)]">
@@ -499,7 +453,7 @@ function Reviews() {
                 </div>
                 <div>
                   <div className="text-sm font-semibold text-white">{r.name}</div>
-                  <div className="text-xs text-white/50">Verified diner</div>
+                  <div className="text-xs text-white/50">{("source" in r && r.source) ? `${r.source} review` : "Verified diner"}</div>
                 </div>
               </div>
             </motion.div>
