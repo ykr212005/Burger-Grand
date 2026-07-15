@@ -453,7 +453,7 @@ function Reviews() {
                 </div>
                 <div>
                   <div className="text-sm font-semibold text-white">{r.name}</div>
-                  <div className="text-xs text-white/50">Verified diner</div>
+                  <div className="text-xs text-white/50">{("source" in r && r.source) ? `${r.source} review` : "Verified diner"}</div>
                 </div>
               </div>
             </motion.div>
