@@ -464,7 +464,13 @@ function MenuPage() {
 
                   <div className="border-t border-white/10 p-5">
                     <button
-                      onClick={() => setPlaced(true)}
+                      onClick={() => {
+                        ordersStore.add({
+                          lines: cartLines.map((l) => ({ name: l.name, qty: l.qty, price: l.price })),
+                          subtotal, tax, delivery, total: grandTotal,
+                        });
+                        setPlaced(true);
+                      }}
                       className="btn-glow hover:btn-glow-hover flex w-full items-center justify-center gap-2 rounded-full px-6 py-4 text-base font-bold"
                     >
                       Place Order · {INR(grandTotal)}
