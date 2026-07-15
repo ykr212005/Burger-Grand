@@ -407,12 +407,12 @@ function TiltCard({ children }: { children: React.ReactNode }) {
 
 /* ---------------- REVIEWS ---------------- */
 const reviews = [
+  { name: "Ved Prakash", text: "One of the hidden gems. Order the veg cheese burger and you'll be surprised — better than mainstream franchises. Don't take my word for it, just try one and feel the crisp. Tip: try the brownie too!", rating: 5, verified: true, source: "Google" },
   { name: "Amara J.", text: "The signature burger is the best I've had in the city. Cinematic vibes, cinematic flavor.", rating: 5 },
   { name: "Diego R.", text: "Wood-fired pizza with a crust that's crisp and chewy. Perfection.", rating: 5 },
   { name: "Priya S.", text: "Delivery arrived hot and beautifully packed. The Oreo shake stole the show.", rating: 5 },
   { name: "Marcus O.", text: "Absolutely premium. It felt like fine dining ordered to my couch.", rating: 5 },
   { name: "Léa K.", text: "The sundae was theatre in a glass. My kids won't stop asking to go back.", rating: 5 },
-  { name: "Yuki T.", text: "Consistent quality every visit. The staff care, and you can taste it.", rating: 5 },
 ];
 
 function Reviews() {
