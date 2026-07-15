@@ -60,8 +60,6 @@ function Hero() {
   const wrapRef = useRef<HTMLDivElement>(null);
   const mx = useMotionValue(0);
   const my = useMotionValue(0);
-  const smx = useSpring(mx, { stiffness: 60, damping: 15 });
-  const smy = useSpring(my, { stiffness: 60, damping: 15 });
 
   const onMove = (e: React.MouseEvent) => {
     const r = wrapRef.current?.getBoundingClientRect();
@@ -69,6 +67,7 @@ function Hero() {
     mx.set((e.clientX - r.left - r.width / 2) / r.width);
     my.set((e.clientY - r.top - r.height / 2) / r.height);
   };
+
 
   return (
     <section
