@@ -419,10 +419,18 @@ function Reviews() {
   return (
     <section id="reviews" className="relative overflow-hidden py-32">
       <div className="mx-auto max-w-7xl px-6 text-center">
-        <span className="text-xs uppercase tracking-[0.3em] text-accent">Reviews</span>
+        <span className="text-xs uppercase tracking-[0.3em] text-accent">Official Reviews</span>
         <h2 className="mt-4 font-display text-4xl font-black sm:text-5xl md:text-6xl">
           Loved by <span className="text-gradient-fire">thousands</span>.
         </h2>
+        <a
+          href="https://share.google/1Jdm6PHgAdQhy8l6e"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-4 inline-flex items-center gap-2 rounded-full glass px-4 py-2 text-sm font-semibold text-white hover:bg-white/10"
+        >
+          <Star className="h-4 w-4 fill-accent text-accent" /> Read reviews on Google
+        </a>
       </div>
 
       <div className="mt-16 overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_15%,#000_85%,transparent)]">
