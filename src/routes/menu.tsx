@@ -10,6 +10,7 @@ import wrapImg from "@/assets/wrap.jpg";
 import shakeImg from "@/assets/shake.jpg";
 import sundaeImg from "@/assets/sundae.jpg";
 import { SiteFooter } from "@/components/site-footer";
+import { ordersStore } from "@/lib/orders-store";
 
 export const Route = createFileRoute("/menu")({
   head: () => ({
