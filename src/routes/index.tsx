@@ -9,6 +9,7 @@ import {
 
 import heroBg from "@/assets/hero-bg.jpg";
 import heroVideo from "@/assets/hero-bg.mp4.asset.json";
+import pizzaVideo from "@/assets/pizza-hero.mp4.asset.json";
 import burgerImg from "@/assets/burger.jpg";
 import pizzaImg from "@/assets/pizza.jpg";
 import sandwichImg from "@/assets/sandwich.jpg";
@@ -87,6 +88,18 @@ function Hero() {
         preload="auto"
         aria-hidden
         className="pointer-events-none absolute inset-x-0 top-0 -z-10 w-full object-contain object-top"
+      />
+
+      {/* Right-side pizza animation, aligned behind the headline */}
+      <video
+        src={pizzaVideo.url}
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="auto"
+        aria-hidden
+        className="pointer-events-none absolute right-0 top-1/2 -z-[5] hidden -translate-y-1/2 md:block h-[70vh] w-auto max-w-[55%] object-contain opacity-90 [mask-image:linear-gradient(to_left,black_55%,transparent_100%)]"
       />
 
 
