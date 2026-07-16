@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Menu, X, Flame, ClipboardList, MapPin, Phone } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
-import { useOrders } from "@/lib/orders-store";
+import { useOrders, ordersStore } from "@/lib/orders-store";
 
 const links = [
   { to: "/", label: "Home" },
@@ -170,10 +170,13 @@ export function SiteNav() {
               ) : (
                 <div className="flex-1 overflow-y-auto p-5">
                   <div className="space-y-4">
-                    {orders.map((o) => (
+                    {orders.map((o, idx) => {
+                      const canCancel = idx === 0 && o.status === "Preparing";
+                      const isCancelled = o.status === "Cancelled";
+                      return (
                       <div
                         key={o.id}
-                        className="rounded-2xl border border-white/10 bg-white/[0.03] p-4"
+                        className={`rounded-2xl border border-white/10 bg-white/[0.03] p-4 ${isCancelled ? "opacity-60" : ""}`}
                       >
                         <div className="flex items-start justify-between gap-3">
                           <div>
@@ -184,7 +187,7 @@ export function SiteNav() {
                               {new Date(o.createdAt).toLocaleString()}
                             </div>
                           </div>
-                          <span className="rounded-full bg-[image:var(--gradient-fire)] px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white shadow-glow">
+                          <span className={`rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white shadow-glow ${isCancelled ? "bg-white/20" : "bg-[image:var(--gradient-fire)]"}`}>
                             {o.status}
                           </span>
                         </div>
@@ -217,8 +220,22 @@ export function SiteNav() {
                             </span>
                           </div>
                         </div>
+
+                        {canCancel && (
+                          <button
+                            onClick={() => {
+                              if (confirm("Cancel this order before delivery?")) {
+                                ordersStore.cancel(o.id);
+                              }
+                            }}
+                            className="mt-4 w-full rounded-full border border-primary/50 bg-primary/10 px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-white transition hover:bg-primary/20"
+                          >
+                            Cancel Order
+                          </button>
+                        )}
                       </div>
-                    ))}
+                      );
+                    })}
                   </div>
 
                   <div className="mt-6 rounded-2xl glass p-4 text-xs text-white/60">

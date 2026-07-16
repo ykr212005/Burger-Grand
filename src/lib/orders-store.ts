@@ -9,7 +9,7 @@ export type Order = {
   tax: number;
   delivery: number;
   total: number;
-  status: "Preparing" | "Out for delivery" | "Delivered";
+  status: "Preparing" | "Out for delivery" | "Delivered" | "Cancelled";
 };
 
 const KEY = "bg_orders_v1";
@@ -55,6 +55,10 @@ export const ordersStore = {
   },
   clear() {
     orders = [];
+    emit();
+  },
+  cancel(id: string) {
+    orders = orders.map((o) => (o.id === id ? { ...o, status: "Cancelled" as const } : o));
     emit();
   },
 };
