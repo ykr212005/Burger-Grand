@@ -86,13 +86,9 @@ function Hero() {
         playsInline
         preload="auto"
         aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10 h-full w-full object-cover"
+        className="pointer-events-none absolute inset-x-0 top-0 -z-10 w-full object-contain object-top"
       />
-      {/* Soft vignette from bottom for text legibility (no dark filter over video) */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-1/2 bg-gradient-to-t from-black/70 via-black/20 to-transparent"
-      />
+
 
       {/* steam particles */}
       {[...Array(8)].map((_, i) => (
