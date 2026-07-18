@@ -77,7 +77,8 @@ function Hero() {
       className="relative flex min-h-[100svh] items-center overflow-hidden pt-28"
       style={{ background: "var(--gradient-hero)" }}
     >
-      {/* Background video — covers hero on all devices, sits behind text */}
+      {/* Background video — covers hero on all devices, sits behind text.
+          On mobile it fades to the hero background under the copy so text stays readable. */}
       <video
         src={heroVideo.url}
         poster={heroBg}
@@ -87,10 +88,12 @@ function Hero() {
         playsInline
         preload="auto"
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 -z-10 w-full object-contain object-top"
+        className="pointer-events-none absolute inset-x-0 top-0 -z-10 w-full object-contain object-top opacity-60 [mask-image:linear-gradient(to_bottom,black_0%,black_35%,transparent_75%)] md:opacity-100 md:[mask-image:none]"
       />
 
-      {/* Right-side pizza animation, aligned behind the headline */}
+      {/* Right-side pizza animation, aligned behind the headline.
+          Mobile: small, pinned top-right behind the badge with a soft fade.
+          Tablet/Desktop: larger, vertically centered with a left-fade mask so copy stays legible. */}
       <video
         src={pizzaVideo.url}
         autoPlay
@@ -99,7 +102,12 @@ function Hero() {
         playsInline
         preload="auto"
         aria-hidden
-        className="pointer-events-none absolute right-0 top-1/2 -z-[5] hidden -translate-y-1/2 md:block h-[70vh] w-auto max-w-[55%] object-contain opacity-90 [mask-image:linear-gradient(to_left,black_55%,transparent_100%)]"
+        className="pointer-events-none absolute -z-[5] object-contain opacity-70 md:opacity-90
+          right-0 top-24 h-[38vh] w-auto max-w-[70%]
+          [mask-image:radial-gradient(circle_at_80%_30%,black_35%,transparent_75%)]
+          md:top-1/2 md:h-[60vh] md:max-w-[55%] md:-translate-y-1/2
+          md:[mask-image:linear-gradient(to_left,black_55%,transparent_100%)]
+          lg:h-[70vh]"
       />
 
 
