@@ -9,7 +9,7 @@ import {
 
 import heroBg from "@/assets/hero-bg.jpg";
 import heroVideo from "@/assets/hero-bg.mp4.asset.json";
-import pizzaVideo from "@/assets/pizza-hero.mp4.asset.json";
+import pizzaVideo from "@/assets/pizza-hero-2.mp4.asset.json";
 import burgerImg from "@/assets/burger.jpg";
 import pizzaImg from "@/assets/pizza.jpg";
 import sandwichImg from "@/assets/sandwich.jpg";
