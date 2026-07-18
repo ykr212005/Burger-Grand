@@ -60,10 +60,30 @@ function Home() {
 }
 
 /* ---------------- HERO ---------------- */
+function useHeroVideoStrategy() {
+  const [state, setState] = useState({ enableBg: false, enableSide: false });
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    // @ts-expect-error non-standard
+    const conn = navigator.connection as { saveData?: boolean; effectiveType?: string } | undefined;
+    const slow = !!conn && (conn.saveData || /2g/.test(conn.effectiveType ?? ""));
+    if (reduced || slow) return;
+    const isDesktop = window.matchMedia("(min-width: 768px)").matches;
+    const mount = () => setState({ enableBg: true, enableSide: isDesktop });
+    // Defer video mount so LCP text/poster paint first
+    const ric = (window as unknown as { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number }).requestIdleCallback;
+    if (ric) ric(mount, { timeout: 1200 });
+    else setTimeout(mount, 400);
+  }, []);
+  return state;
+}
+
 function Hero() {
   const wrapRef = useRef<HTMLDivElement>(null);
   const mx = useMotionValue(0);
   const my = useMotionValue(0);
+  const { enableBg, enableSide } = useHeroVideoStrategy();
 
   const onMove = (e: React.MouseEvent) => {
     const r = wrapRef.current?.getBoundingClientRect();
@@ -80,30 +100,44 @@ function Hero() {
       className="relative flex min-h-[100svh] items-center overflow-hidden pt-28"
       style={{ background: "var(--gradient-hero)" }}
     >
-      {/* Background video — covers hero on all devices, sits behind text */}
-      <video
-        src={heroVideo.url}
-        poster={heroBg}
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="auto"
+      {/* Poster image paints instantly as LCP, video swaps in when idle */}
+      <img
+        src={heroBg}
+        alt=""
         aria-hidden
+        fetchPriority="high"
+        decoding="async"
         className="pointer-events-none absolute inset-x-0 top-0 -z-10 w-full object-contain object-top"
       />
 
-      {/* Right-side pizza animation, aligned behind the headline */}
-      <video
-        src={pizzaVideo.url}
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="auto"
-        aria-hidden
-        className="pointer-events-none absolute right-0 top-1/2 -z-[5] hidden -translate-y-1/2 md:block h-[70vh] w-auto max-w-[55%] object-contain opacity-90 [mask-image:linear-gradient(to_left,black_55%,transparent_100%)]"
-      />
+      {/* Background video — mounted only after idle, skipped on reduced-motion / save-data */}
+      {enableBg && (
+        <video
+          src={heroVideo.url}
+          poster={heroBg}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 top-0 -z-10 w-full object-contain object-top"
+        />
+      )}
+
+      {/* Right-side pizza animation — desktop only, deferred */}
+      {enableSide && (
+        <video
+          src={pizzaVideo.url}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          aria-hidden
+          className="pointer-events-none absolute right-0 top-1/2 -z-[5] hidden -translate-y-1/2 md:block h-[70vh] w-auto max-w-[55%] object-contain opacity-90 [mask-image:linear-gradient(to_left,black_55%,transparent_100%)]"
+        />
+      )}
 
 
       {/* steam particles */}
