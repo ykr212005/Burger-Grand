@@ -24,6 +24,9 @@ export const Route = createFileRoute("/")({
       { title: "Burger Grand — Fresh. Hot. Loaded With Flavor." },
       { name: "description", content: "Cinematic dining experience. Handcrafted burgers, pizzas, wraps, shakes and sundaes with premium ingredients — order now." },
     ],
+    links: [
+      { rel: "preload", as: "image", href: heroBg, fetchpriority: "high" },
+    ],
   }),
   component: Home,
 });
