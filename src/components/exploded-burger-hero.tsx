@@ -127,13 +127,16 @@ function LayerPiece({
 
 }
 
-function Smoke({ opacity }: { opacity: MotionValue<number> }) {
+function Smoke({ opacity, reduced }: { opacity: MotionValue<number>; reduced?: boolean }) {
   return (
-    <motion.div style={{ opacity }} className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
-      {[0, 1, 2, 3].map((i) => (
+    <motion.div
+      style={{ opacity, contain: "paint" }}
+      className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
+    >
+      {(reduced ? [0, 1] : [0, 1, 2, 3]).map((i) => (
         <span
           key={i}
-          className="absolute bottom-[22%] left-1/2 block h-64 w-64 rounded-full blur-3xl animate-smoke-drift"
+          className={`absolute bottom-[22%] left-1/2 block h-64 w-64 rounded-full animate-smoke-drift ${reduced ? "blur-2xl" : "blur-3xl"}`}
           style={{
             marginLeft: `${(i - 1.5) * 70}px`,
             animationDelay: `${i * 2.4}s`,
