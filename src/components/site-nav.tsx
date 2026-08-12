@@ -168,7 +168,7 @@ function Drawer({ open, onClose, children }: { open: boolean; onClose: () => voi
           <motion.div
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 z-[60] bg-charcoal/45 backdrop-blur-[2px]"
+            className="fixed inset-0 z-[60] bg-ink/70 backdrop-blur-[2px]"
           />
           <motion.aside
             initial={{ x: "100%" }} animate={{ x: 0 }} exit={{ x: "100%" }}

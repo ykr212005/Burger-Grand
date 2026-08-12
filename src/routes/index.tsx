@@ -653,7 +653,7 @@ function Gallery() {
             <Reveal key={g.cap} delay={i * 0.04}>
               <figure className={`group relative overflow-hidden ${i % 5 === 0 ? "md:row-span-2 md:h-[32rem]" : "h-[15.5rem]"}`}>
                 <img src={g.img} alt={g.cap} loading="lazy" width={800} height={800} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
-                <figcaption className="absolute inset-x-0 bottom-0 translate-y-full bg-ink/85 px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.16em] text-offwhite transition-transform duration-400 group-hover:translate-y-0">
+                <figcaption className="absolute inset-x-0 bottom-0 translate-y-full bg-ink/85 px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.16em] text-foreground transition-transform duration-400 group-hover:translate-y-0">
                   {g.cap}
                 </figcaption>
               </figure>
