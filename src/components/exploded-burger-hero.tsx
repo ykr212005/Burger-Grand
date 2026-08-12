@@ -60,6 +60,7 @@ function LayerPiece({
   labelOpacity,
   showLabels,
   spread = 1,
+  rich = true,
 }: {
   layer: Layer;
   p: MotionValue<number>;
@@ -68,6 +69,8 @@ function LayerPiece({
   labelOpacity: MotionValue<number>;
   showLabels: boolean;
   spread?: number;
+  /** enable 3D depth + mouse parallax (desktop only) */
+  rich?: boolean;
 }) {
   const base = layer.base * spread;
   const travel = layer.travel * spread;
@@ -79,19 +82,31 @@ function LayerPiece({
   const px = useTransform(mx, (v) => v * layer.depth);
   const py = useTransform(my, (v) => v * layer.depth);
 
+  const style = rich
+    ? { y, x: px, translateY: py, rotate, rotateX, translateZ: zpx, zIndex: layer.z }
+    : { y, rotate, zIndex: layer.z };
+
   return (
     <div className="pointer-events-none absolute inset-0 grid place-items-center">
-    <motion.div
-      style={{ y, x: px, translateY: py, rotate, rotateX, translateZ: zpx, zIndex: layer.z }}
-    >
+    <motion.div style={style}>
 
-      <div className="relative" style={{ width: `${layer.w * 8}px`, maxWidth: "68vw", willChange: "transform" }}>
+      <div
+        className="relative"
+        style={{
+          width: `${layer.w * 8}px`,
+          maxWidth: "68vw",
+          willChange: "transform",
+          backfaceVisibility: "hidden",
+        }}
+      >
         <img
           src={layer.src}
           alt={layer.alt}
-          className="w-full select-none drop-shadow-[0_18px_26px_oklch(0_0_0_/_0.6)]"
+          className={`w-full select-none ${rich ? "drop-shadow-[0_18px_26px_oklch(0_0_0_/_0.6)]" : "drop-shadow-[0_8px_10px_oklch(0_0_0_/_0.55)]"}`}
           draggable={false}
+          decoding="async"
         />
+
         {showLabels && layer.label && (
           <motion.div
             style={{ opacity: labelOpacity }}
@@ -112,13 +127,16 @@ function LayerPiece({
 
 }
 
-function Smoke({ opacity }: { opacity: MotionValue<number> }) {
+function Smoke({ opacity, reduced }: { opacity: MotionValue<number>; reduced?: boolean }) {
   return (
-    <motion.div style={{ opacity }} className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
-      {[0, 1, 2, 3].map((i) => (
+    <motion.div
+      style={{ opacity, contain: "paint" }}
+      className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
+    >
+      {(reduced ? [0, 1] : [0, 1, 2, 3]).map((i) => (
         <span
           key={i}
-          className="absolute bottom-[22%] left-1/2 block h-64 w-64 rounded-full blur-3xl animate-smoke-drift"
+          className={`absolute bottom-[22%] left-1/2 block h-64 w-64 rounded-full animate-smoke-drift ${reduced ? "blur-2xl" : "blur-3xl"}`}
           style={{
             marginLeft: `${(i - 1.5) * 70}px`,
             animationDelay: `${i * 2.4}s`,
@@ -143,7 +161,7 @@ const PARTICLES = [
 function Particles({ opacity, reduced }: { opacity: MotionValue<number>; reduced?: boolean }) {
   return (
     <motion.div style={{ opacity }} className="pointer-events-none absolute inset-0 z-[80]">
-      {(reduced ? PARTICLES.slice(0, 4) : PARTICLES).map((p, i) => (
+      {(reduced ? PARTICLES.slice(0, 3) : PARTICLES).map((p, i) => (
         <span
           key={i}
           className="absolute rounded-full animate-particle-float"
@@ -166,35 +184,54 @@ function Particles({ opacity, reduced }: { opacity: MotionValue<number>; reduced
 export function ExplodedBurgerHero() {
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
-  const p = useSpring(scrollYProgress, { stiffness: 120, damping: 26, mass: 0.4, restDelta: 0.0005 });
 
   const [desktop, setDesktop] = useState(false);
   const [wide, setWide] = useState(false);
+  const [calm, setCalm] = useState(false);
   const [open, setOpen] = useState(true);
   useEffect(() => {
     setOpen(isOpenNow());
     const mq = window.matchMedia("(min-width: 1024px) and (pointer: fine)");
     const mqWide = window.matchMedia("(min-width: 1024px)");
-    const on = () => { setDesktop(mq.matches); setWide(mqWide.matches); };
+    const mqCalm = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const on = () => { setDesktop(mq.matches); setWide(mqWide.matches); setCalm(mqCalm.matches); };
     on();
     mq.addEventListener("change", on);
     mqWide.addEventListener("change", on);
-    return () => { mq.removeEventListener("change", on); mqWide.removeEventListener("change", on); };
+    mqCalm.addEventListener("change", on);
+    return () => {
+      mq.removeEventListener("change", on);
+      mqWide.removeEventListener("change", on);
+      mqCalm.removeEventListener("change", on);
+    };
   }, []);
 
+  // lighter spring (and a coarser rest threshold) on touch devices keeps the
+  // scrub cheap enough to hold 60fps on phones
+  const p = useSpring(
+    scrollYProgress,
+    desktop
+      ? { stiffness: 120, damping: 26, mass: 0.4, restDelta: 0.0005 }
+      : { stiffness: 90, damping: 22, mass: 0.25, restDelta: 0.004 },
+  );
+
+  // reduced motion: pin the timeline at 0 (assembled burger, no scrub)
+  const still = useMotionValue(0);
+  const tl = calm ? still : p;
+
   // camera / composition
-  const stageScale = useTransform(p, [0, 0.2, 0.6, 0.8, 1], [1, 1.02, 0.9, 0.9, 0.74]);
-  const stageY = useTransform(p, [0.8, 1], [0, -70]);
-  const stageXWide = useTransform(p, [0.25, 0.6], [0, -190]);
-  const stageXNarrow = useTransform(p, [0, 1], [0, 0]);
+  const stageScale = useTransform(tl, [0, 0.2, 0.6, 0.8, 1], [1, 1.02, 0.9, 0.9, 0.74]);
+  const stageY = useTransform(tl, [0.8, 1], [0, -70]);
+  const stageXWide = useTransform(tl, [0.25, 0.6], [0, -190]);
+  const stageXNarrow = useTransform(tl, [0, 1], [0, 0]);
   const stageX = wide ? stageXWide : stageXNarrow;
-  const stageOpacity = useTransform(p, [0.9, 1], [1, 0.25]);
-  const textY = useTransform(p, [0, 0.35, 1], [0, -40, -170]);
-  const textOpacity = useTransform(p, [0, 0.28, 0.45], [1, 1, 0]);
-  const labelOpacity = useTransform(p, [0.58, 0.68, 0.92, 1], [0, 1, 1, 0]);
-  const smokeOpacity = useTransform(p, [0, 0.2, 0.6, 0.85, 1], [0.35, 0.55, 1, 0.8, 0]);
-  const particleOpacity = useTransform(p, [0.15, 0.4, 0.85, 1], [0, 1, 0.9, 0]);
-  const hintOpacity = useTransform(p, [0, 0.12], [1, 0]);
+  const stageOpacity = useTransform(tl, [0.9, 1], [1, 0.25]);
+  const textY = useTransform(tl, [0, 0.35, 1], [0, -40, -170]);
+  const textOpacity = useTransform(tl, [0, 0.28, 0.45], [1, 1, 0]);
+  const labelOpacity = useTransform(tl, [0.58, 0.68, 0.92, 1], [0, 1, 1, 0]);
+  const smokeOpacity = useTransform(tl, [0, 0.2, 0.6, 0.85, 1], [0.35, 0.55, 1, 0.8, 0]);
+  const particleOpacity = useTransform(tl, [0.15, 0.4, 0.85, 1], [0, 1, 0.9, 0]);
+  const hintOpacity = useTransform(tl, [0, 0.12], [1, 0]);
 
   const mxRaw = useMotionValue(0);
   const myRaw = useMotionValue(0);
@@ -259,10 +296,27 @@ export function ExplodedBurgerHero() {
             style={{ scale: stageScale, x: stageX, y: stageY, opacity: stageOpacity, rotate: desktop ? tilt : 0 }}
             className="relative z-[60] order-1 h-full w-full lg:order-2 lg:h-[80vh]"
           >
-            <Smoke opacity={smokeOpacity} />
-            <div className="absolute inset-0" style={{ perspective: 1200, transformStyle: "preserve-3d" }}>
+            <Smoke opacity={smokeOpacity} reduced={!desktop} />
+            <div
+              className="absolute inset-0"
+              style={
+                desktop
+                  ? { perspective: 1200, transformStyle: "preserve-3d", contain: "paint" }
+                  : { contain: "paint" }
+              }
+            >
               {LAYERS.map((l) => (
-                <LayerPiece key={l.key} layer={l} p={p} mx={mx} my={my} labelOpacity={labelOpacity} showLabels={desktop} spread={wide ? 1 : 0.55} />
+                <LayerPiece
+                  key={l.key}
+                  layer={l}
+                  p={tl}
+                  mx={mx}
+                  my={my}
+                  labelOpacity={labelOpacity}
+                  showLabels={desktop}
+                  spread={wide ? 1 : 0.55}
+                  rich={desktop}
+                />
               ))}
             </div>
             <Particles opacity={particleOpacity} reduced={!wide} />
