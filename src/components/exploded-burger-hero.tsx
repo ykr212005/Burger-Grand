@@ -76,10 +76,11 @@ function LayerPiece({
   const py = useTransform(my, (v) => v * layer.depth);
 
   return (
+    <div className="pointer-events-none absolute inset-0 grid place-items-center">
     <motion.div
       style={{ y, x: px, translateY: py, rotate, rotateX, translateZ: zpx, zIndex: layer.z }}
-      className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
     >
+
       <div className="relative" style={{ width: `${layer.w * 8}px`, maxWidth: "60vw" }}>
         <img
           src={layer.src}
