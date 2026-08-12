@@ -59,6 +59,7 @@ function LayerPiece({
   my,
   labelOpacity,
   showLabels,
+  spread = 1,
 }: {
   layer: Layer;
   p: MotionValue<number>;
@@ -66,9 +67,12 @@ function LayerPiece({
   my: MotionValue<number>;
   labelOpacity: MotionValue<number>;
   showLabels: boolean;
+  spread?: number;
 }) {
+  const base = layer.base * spread;
+  const travel = layer.travel * spread;
   // explosion runs 0.20 -> 0.60, held to 0.80, then eases away
-  const y = useTransform(p, [0, 0.2, 0.6, 0.8, 1], [layer.base, layer.base, layer.base + layer.travel, layer.base + layer.travel, layer.base + layer.travel * 0.86]);
+  const y = useTransform(p, [0, 0.2, 0.6, 0.8, 1], [base, base, base + travel, base + travel, base + travel * 0.86]);
   const rotate = useTransform(p, [0.2, 0.6, 1], [0, layer.rot, layer.rot * 0.7]);
   const rotateX = useTransform(p, [0.2, 0.6], [0, layer.rot * 1.6]);
   const zpx = useTransform(p, [0.2, 0.6], [0, layer.depth * 90]);
@@ -81,7 +85,7 @@ function LayerPiece({
       style={{ y, x: px, translateY: py, rotate, rotateX, translateZ: zpx, zIndex: layer.z }}
     >
 
-      <div className="relative" style={{ width: `${layer.w * 8}px`, maxWidth: "60vw" }}>
+      <div className="relative" style={{ width: `${layer.w * 8}px`, maxWidth: "68vw", willChange: "transform" }}>
         <img
           src={layer.src}
           alt={layer.alt}
@@ -136,10 +140,10 @@ const PARTICLES = [
   { x: 20, y: 48, s: 3, d: 4 }, { x: 58, y: 88, s: 4, d: 1.1 },
 ];
 
-function Particles({ opacity }: { opacity: MotionValue<number> }) {
+function Particles({ opacity, reduced }: { opacity: MotionValue<number>; reduced?: boolean }) {
   return (
     <motion.div style={{ opacity }} className="pointer-events-none absolute inset-0 z-[80]">
-      {PARTICLES.map((p, i) => (
+      {(reduced ? PARTICLES.slice(0, 4) : PARTICLES).map((p, i) => (
         <span
           key={i}
           className="absolute rounded-full animate-particle-float"
@@ -165,20 +169,25 @@ export function ExplodedBurgerHero() {
   const p = useSpring(scrollYProgress, { stiffness: 120, damping: 26, mass: 0.4, restDelta: 0.0005 });
 
   const [desktop, setDesktop] = useState(false);
+  const [wide, setWide] = useState(false);
   const [open, setOpen] = useState(true);
   useEffect(() => {
     setOpen(isOpenNow());
     const mq = window.matchMedia("(min-width: 1024px) and (pointer: fine)");
-    const on = () => setDesktop(mq.matches);
+    const mqWide = window.matchMedia("(min-width: 1024px)");
+    const on = () => { setDesktop(mq.matches); setWide(mqWide.matches); };
     on();
     mq.addEventListener("change", on);
-    return () => mq.removeEventListener("change", on);
+    mqWide.addEventListener("change", on);
+    return () => { mq.removeEventListener("change", on); mqWide.removeEventListener("change", on); };
   }, []);
 
   // camera / composition
   const stageScale = useTransform(p, [0, 0.2, 0.6, 0.8, 1], [1, 1.02, 0.9, 0.9, 0.74]);
   const stageY = useTransform(p, [0.8, 1], [0, -70]);
-  const stageX = useTransform(p, [0.25, 0.6], [0, -190]);
+  const stageXWide = useTransform(p, [0.25, 0.6], [0, -190]);
+  const stageXNarrow = useTransform(p, [0, 1], [0, 0]);
+  const stageX = wide ? stageXWide : stageXNarrow;
   const stageOpacity = useTransform(p, [0.9, 1], [1, 0.25]);
   const textY = useTransform(p, [0, 0.35, 1], [0, -40, -170]);
   const textOpacity = useTransform(p, [0, 0.28, 0.45], [1, 1, 0]);
@@ -196,8 +205,7 @@ export function ExplodedBurgerHero() {
   return (
     <section
       ref={ref}
-      className="relative bg-ink"
-      style={{ height: "250vh" }}
+      className="relative h-[200vh] bg-ink lg:h-[250vh]"
       onMouseMove={(e) => {
         if (!desktop) return;
         const r = e.currentTarget.getBoundingClientRect();
@@ -209,9 +217,9 @@ export function ExplodedBurgerHero() {
       <div className="sticky top-0 h-screen overflow-hidden">
         <div className="pointer-events-none absolute left-1/2 top-1/2 h-[46rem] w-[46rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,_oklch(0.815_0.128_82_/_0.14),transparent_66%)]" />
 
-        <div className="relative mx-auto grid h-full max-w-7xl items-center gap-6 px-6 lg:grid-cols-[1fr_1.05fr]">
+        <div className="relative mx-auto grid h-full max-w-7xl grid-rows-[62vh_auto] items-center gap-2 px-6 pb-8 pt-14 sm:gap-6 lg:grid-cols-[1fr_1.05fr] lg:grid-rows-1 lg:pb-0 lg:pt-0">
           {/* copy */}
-          <motion.div style={{ y: textY, opacity: textOpacity }} className="relative z-[90] pt-24 lg:pt-0">
+          <motion.div style={{ y: textY, opacity: textOpacity }} className="relative z-[20] order-2 lg:order-1 lg:z-[90] lg:pt-0">
             <div className="eyebrow">Burger Grand Nawada</div>
             <h1 className="display-xl mt-4 text-[clamp(2.4rem,7vw,5.2rem)]">
               Bite Into
@@ -249,19 +257,19 @@ export function ExplodedBurgerHero() {
           {/* stage */}
           <motion.div
             style={{ scale: stageScale, x: stageX, y: stageY, opacity: stageOpacity, rotate: desktop ? tilt : 0 }}
-            className="relative h-[58vh] w-full lg:h-[80vh]"
+            className="relative z-[60] order-1 h-full w-full lg:order-2 lg:h-[80vh]"
           >
             <Smoke opacity={smokeOpacity} />
             <div className="absolute inset-0" style={{ perspective: 1200, transformStyle: "preserve-3d" }}>
               {LAYERS.map((l) => (
-                <LayerPiece key={l.key} layer={l} p={p} mx={mx} my={my} labelOpacity={labelOpacity} showLabels={desktop} />
+                <LayerPiece key={l.key} layer={l} p={p} mx={mx} my={my} labelOpacity={labelOpacity} showLabels={desktop} spread={wide ? 1 : 0.55} />
               ))}
             </div>
-            <Particles opacity={particleOpacity} />
+            <Particles opacity={particleOpacity} reduced={!wide} />
 
-            <motion.div style={{ x: mx, translateY: my }} className="absolute right-2 top-6 z-[95] sm:right-6">
-              <div className="flex h-20 w-20 animate-badge-float items-center justify-center rounded-full bg-accent text-center text-[9px] font-bold uppercase leading-tight tracking-[0.14em] text-ink shadow-card">
-                ★<br />Bestseller<br />{INR(90)}
+            <motion.div style={{ x: mx, translateY: my }} className="absolute left-2 top-16 z-[95] sm:left-6 sm:top-6">
+              <div className="animate-badge-float rounded-full bg-accent px-4 py-2 text-[10px] font-bold uppercase tracking-[0.2em] text-ink shadow-card">
+                Bestseller · {INR(90)}
               </div>
             </motion.div>
 
