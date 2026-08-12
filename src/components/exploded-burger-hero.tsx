@@ -165,20 +165,25 @@ export function ExplodedBurgerHero() {
   const p = useSpring(scrollYProgress, { stiffness: 120, damping: 26, mass: 0.4, restDelta: 0.0005 });
 
   const [desktop, setDesktop] = useState(false);
+  const [wide, setWide] = useState(false);
   const [open, setOpen] = useState(true);
   useEffect(() => {
     setOpen(isOpenNow());
     const mq = window.matchMedia("(min-width: 1024px) and (pointer: fine)");
-    const on = () => setDesktop(mq.matches);
+    const mqWide = window.matchMedia("(min-width: 1024px)");
+    const on = () => { setDesktop(mq.matches); setWide(mqWide.matches); };
     on();
     mq.addEventListener("change", on);
-    return () => mq.removeEventListener("change", on);
+    mqWide.addEventListener("change", on);
+    return () => { mq.removeEventListener("change", on); mqWide.removeEventListener("change", on); };
   }, []);
 
   // camera / composition
   const stageScale = useTransform(p, [0, 0.2, 0.6, 0.8, 1], [1, 1.02, 0.9, 0.9, 0.74]);
   const stageY = useTransform(p, [0.8, 1], [0, -70]);
-  const stageX = useTransform(p, [0.25, 0.6], [0, -190]);
+  const stageXWide = useTransform(p, [0.25, 0.6], [0, -190]);
+  const stageXNarrow = useTransform(p, [0, 1], [0, 0]);
+  const stageX = wide ? stageXWide : stageXNarrow;
   const stageOpacity = useTransform(p, [0.9, 1], [1, 0.25]);
   const textY = useTransform(p, [0, 0.35, 1], [0, -40, -170]);
   const textOpacity = useTransform(p, [0, 0.28, 0.45], [1, 1, 0]);
