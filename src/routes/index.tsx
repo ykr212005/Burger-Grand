@@ -19,6 +19,7 @@ import comboImg from "@/assets/combo.jpg";
 
 
 import { SiteFooter } from "@/components/site-footer";
+import { ExplodedBurgerHero } from "@/components/exploded-burger-hero";
 import { FloatingActions } from "@/components/floating-actions";
 import { items } from "@/lib/menu-data";
 import { cartStore } from "@/lib/cart-store";
@@ -135,129 +136,6 @@ function VegDot({ veg }: { veg: boolean }) {
 const byName = (n: string) => items.find((i) => i.name === n)!;
 
 /* ----------------------------------- hero ---------------------------------- */
-
-function Hero() {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-  const burgerY = useTransform(scrollYProgress, [0, 1], [0, 150]);
-  const burgerScale = useTransform(scrollYProgress, [0, 1], [1, 0.82]);
-  const burgerRot = useTransform(scrollYProgress, [0, 1], [0, 8]);
-  const textY = useTransform(scrollYProgress, [0, 1], [0, -60]);
-  const textOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
-
-  const mx = useMotionValue(0);
-  const my = useMotionValue(0);
-  const sx = useSpring(mx, { stiffness: 90, damping: 18 });
-  const sy = useSpring(my, { stiffness: 90, damping: 18 });
-
-  const [mode, setMode] = useState<"delivery" | "pickup">("delivery");
-  const [open, setOpen] = useState(true);
-  useEffect(() => setOpen(isOpenNow()), []);
-
-  return (
-    <section
-      ref={ref}
-      onMouseMove={(e) => {
-        const r = e.currentTarget.getBoundingClientRect();
-        mx.set(((e.clientX - r.left) / r.width - 0.5) * 26);
-        my.set(((e.clientY - r.top) / r.height - 0.5) * 20);
-      }}
-      onMouseLeave={() => { mx.set(0); my.set(0); }}
-      className="relative overflow-hidden bg-ink pt-28 pb-16 sm:pt-32 lg:pt-36"
-    >
-      <div className="pointer-events-none absolute -right-32 top-10 h-[36rem] w-[36rem] rounded-full bg-[radial-gradient(circle,_oklch(0.815_0.128_82_/_0.16),transparent_65%)]" />
-
-
-      <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-6 lg:grid-cols-[1.05fr_1fr]">
-        <motion.div style={{ y: textY, opacity: textOpacity }}>
-          <Reveal>
-            <div className="eyebrow">Burger Grand Nawada</div>
-          </Reveal>
-          <Reveal delay={0.05}>
-            <h1 className="display-xl mt-5 text-[clamp(2.7rem,8vw,5.6rem)]">
-              Bite Into
-              <br />
-              <span className="text-primary">Grandeur.</span>
-            </h1>
-          </Reveal>
-          <Reveal delay={0.1}>
-            <p className="mt-6 max-w-md text-base leading-relaxed text-muted-foreground">
-              Elevated comfort food, right here in Nawada. Hand-crafted burgers,
-              loaded fries, and premium shakes made fresh to order.
-            </p>
-          </Reveal>
-
-
-          <Reveal delay={0.15}>
-            <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Link to="/menu" className="btn-primary hover:btn-primary-hover inline-flex items-center gap-2 rounded-full px-7 py-4 text-xs font-bold uppercase tracking-[0.18em]">
-                Order Now <ArrowRight className="h-4 w-4" />
-              </Link>
-              <a href="#menu" className="btn-ghost hover:btn-ghost-hover inline-flex rounded-full px-7 py-4 text-xs font-bold uppercase tracking-[0.18em]">
-                Explore Menu
-              </a>
-            </div>
-          </Reveal>
-
-          <Reveal delay={0.2}>
-            <div className="mt-7 inline-flex rounded-full border border-border p-1">
-              {(["delivery", "pickup"] as const).map((m) => (
-                <button
-                  key={m}
-                  onClick={() => setMode(m)}
-                  className={`rounded-full px-5 py-2 text-[11px] font-bold uppercase tracking-[0.16em] transition ${
-                    mode === m ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"
-                  }`}
-                >
-                  {m}
-                </button>
-              ))}
-            </div>
-          </Reveal>
-
-          <Reveal delay={0.25}>
-            <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-4">
-              <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em]">
-                <span className={`h-2 w-2 rounded-full ${open ? "animate-pulse-dot bg-fresh" : "bg-secondary"}`} />
-                {open ? "Open Now" : "Closed"} <span className="font-normal normal-case tracking-normal text-muted-foreground">· Serving Nawada &amp; Uttam Nagar</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <div className="flex text-accent">
-                  {[0, 1, 2, 3, 4].map((i) => <Star key={i} className="h-4 w-4 fill-current" />)}
-                </div>
-                <span className="text-xs text-muted-foreground">
-                  <strong className="text-foreground">{restaurant.rating}/5</strong> · {restaurant.reviewCount.toLocaleString()}+ happy customers
-                </span>
-              </div>
-            </div>
-          </Reveal>
-        </motion.div>
-
-        <div className="relative">
-          <motion.div
-            style={{ y: burgerY, scale: burgerScale, rotate: burgerRot, x: sx, translateY: sy }}
-            className="relative z-10 mx-auto max-w-[34rem]"
-          >
-            <img
-              src={heroBurger}
-              alt="The Grand double cheeseburger with melting cheese, lettuce and tomato"
-              width={1200}
-              height={1200}
-              className="w-full drop-shadow-[0_40px_50px_oklch(0_0_0_/_0.75)]"
-            />
-            <div className="absolute left-0 top-8 rounded-full bg-primary px-4 py-2 text-[10px] font-bold uppercase tracking-[0.2em] text-primary-foreground">
-              Bestseller
-            </div>
-            <div className="absolute -bottom-2 right-2 rounded-full border border-border bg-offwhite px-4 py-2 text-[11px] font-bold uppercase tracking-[0.16em] shadow-card">
-              Grand Spl · {INR(90)}
-            </div>
-          </motion.div>
-
-        </div>
-      </div>
-    </section>
-  );
-}
 
 /* --------------------------------- marquee --------------------------------- */
 
@@ -761,7 +639,7 @@ function Location() {
 function HomePage() {
   return (
     <main className="pb-16 md:pb-0">
-      <Hero />
+      <ExplodedBurgerHero />
       <Marquee />
       <MenuSection />
       <SignatureBurger />
