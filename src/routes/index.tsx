@@ -252,7 +252,7 @@ function Hero() {
           </motion.div>
 
           <video
-            className="pointer-events-none absolute inset-x-6 bottom-0 -z-0 h-56 w-auto rounded-2xl object-cover opacity-60 sm:h-64"
+            className="pointer-events-none absolute -bottom-4 left-0 z-20 hidden h-36 w-56 border-4 border-offwhite object-cover shadow-lift sm:block"
             src={heroLoop.url}
             autoPlay
             muted
