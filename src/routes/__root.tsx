@@ -18,15 +18,15 @@ function NotFoundComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
-        <h1 className="font-display text-7xl font-bold text-gradient-fire">404</h1>
-        <h2 className="mt-4 font-display text-xl font-semibold text-white">Page not found</h2>
-        <p className="mt-2 text-sm text-white/60">
+        <h1 className="font-display text-7xl font-bold text-primary">404</h1>
+        <h2 className="mt-4 font-display text-xl font-semibold text-foreground">Page not found</h2>
+        <p className="mt-2 text-sm text-foreground/60">
           This dish isn't on the menu. Head back home and try something delicious.
         </p>
         <div className="mt-6">
           <Link
             to="/"
-            className="btn-glow hover:btn-glow-hover inline-flex items-center justify-center rounded-full px-5 py-2.5 text-sm font-semibold"
+            className="btn-primary hover:btn-primary-hover inline-flex items-center justify-center rounded-full px-5 py-2.5 text-sm font-semibold"
           >
             Back to home
           </Link>
@@ -46,20 +46,20 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
-        <h1 className="font-display text-xl font-semibold tracking-tight text-white">
+        <h1 className="font-display text-xl font-semibold tracking-tight text-foreground">
           Something went wrong
         </h1>
-        <p className="mt-2 text-sm text-white/60">
+        <p className="mt-2 text-sm text-foreground/60">
           Our kitchen hit a snag. Try again or head home.
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button
             onClick={() => { router.invalidate(); reset(); }}
-            className="btn-glow hover:btn-glow-hover inline-flex items-center justify-center rounded-full px-5 py-2.5 text-sm font-semibold"
+            className="btn-primary hover:btn-primary-hover inline-flex items-center justify-center rounded-full px-5 py-2.5 text-sm font-semibold"
           >
             Try again
           </button>
-          <a href="/" className="inline-flex items-center justify-center rounded-full border border-white/20 px-5 py-2.5 text-sm font-medium text-white hover:bg-white/5">
+          <a href="/" className="inline-flex items-center justify-center rounded-full border border-white/20 px-5 py-2.5 text-sm font-medium text-foreground hover:bg-white/5">
             Go home
           </a>
         </div>
@@ -80,7 +80,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "Burger Grand serves handcrafted burgers, wood-fired pizzas, crispy sandwiches, fresh wraps, thick shakes and indulgent sundaes made with premium ingredients.",
       },
       { name: "author", content: "Burger Grand" },
-      { name: "theme-color", content: "#0F0F0F" },
+      { name: "theme-color", content: "#FFF7EA" },
       { property: "og:title", content: "Burger Grand — Fresh. Hot. Loaded With Flavor." },
       { property: "og:description", content: "Handcrafted burgers, pizzas, shakes and sundaes made with premium ingredients." },
       { property: "og:type", content: "website" },
@@ -93,7 +93,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800;900&family=Inter:wght@400;500;600;700&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap",
       },
     ],
   }),
