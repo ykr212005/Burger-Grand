@@ -54,34 +54,37 @@
 :root {
   --radius: 0.75rem;
 
-  /* Warm editorial restaurant palette */
-  --cream: oklch(0.972 0.019 82);        /* #FFF7EA */
-  --offwhite: oklch(0.988 0.008 90);     /* #FFFDF8 */
-  --charcoal: oklch(0.215 0.006 45);     /* #191615 */
-  --brand-red: oklch(0.453 0.148 27.5);  /* #A52A24 */
-  --tomato: oklch(0.552 0.176 30);       /* #D94135 */
-  --cheese: oklch(0.816 0.129 84);       /* #F2B84B */
-  --fresh: oklch(0.518 0.079 137);       /* #587A45 */
+  /* Dark luxe steakhouse palette — near-black + warm gold */
+  --ink: oklch(0.145 0.004 60);          /* #0B0A09 deepest */
+  --offwhite: oklch(0.175 0.005 60);     /* base surface */
+  --cream: oklch(0.205 0.007 62);        /* alternating panel */
+  --charcoal: oklch(0.965 0.012 85);     /* warm light (text / inverse panels) */
+  --gold: oklch(0.815 0.128 82);         /* #E5B94E */
+  --gold-deep: oklch(0.72 0.126 72);
+  --brand-red: var(--gold);
+  --tomato: oklch(0.62 0.16 40);
+  --cheese: var(--gold);
+  --fresh: oklch(0.66 0.11 145);
 
-  --background: var(--cream);
+  --background: var(--offwhite);
   --foreground: var(--charcoal);
-  --card: var(--offwhite);
+  --card: var(--cream);
   --card-foreground: var(--charcoal);
-  --popover: var(--offwhite);
+  --popover: var(--cream);
   --popover-foreground: var(--charcoal);
-  --primary: var(--brand-red);
-  --primary-foreground: oklch(0.99 0.005 90);
-  --secondary: var(--tomato);
-  --secondary-foreground: oklch(0.99 0.005 90);
-  --muted: oklch(0.945 0.018 80);
-  --muted-foreground: oklch(0.48 0.012 50);
-  --accent: var(--cheese);
-  --accent-foreground: var(--charcoal);
-  --destructive: oklch(0.552 0.176 30);
+  --primary: var(--gold);
+  --primary-foreground: oklch(0.16 0.006 60);
+  --secondary: var(--gold-deep);
+  --secondary-foreground: oklch(0.16 0.006 60);
+  --muted: oklch(0.245 0.008 62);
+  --muted-foreground: oklch(0.74 0.012 82);
+  --accent: var(--gold);
+  --accent-foreground: oklch(0.16 0.006 60);
+  --destructive: oklch(0.6 0.17 28);
   --destructive-foreground: oklch(0.99 0 0);
-  --border: oklch(0.215 0.006 45 / 12%);
-  --input: oklch(0.215 0.006 45 / 16%);
-  --ring: var(--brand-red);
+  --border: oklch(0.965 0.012 85 / 13%);
+  --input: oklch(0.965 0.012 85 / 18%);
+  --ring: var(--gold);
 }
 
 @layer base {
@@ -95,9 +98,10 @@
   }
   h1, h2, h3, h4, h5 {
     font-family: var(--font-display);
-    letter-spacing: -0.03em;
-    line-height: 0.98;
+    letter-spacing: -0.02em;
+    line-height: 1.02;
   }
+
   ::selection { background: var(--tomato); color: white; }
 }
 
