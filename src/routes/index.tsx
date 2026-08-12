@@ -19,6 +19,7 @@ import comboImg from "@/assets/combo.jpg";
 
 
 import { SiteFooter } from "@/components/site-footer";
+import { ExplodedBurgerHero } from "@/components/exploded-burger-hero";
 import { FloatingActions } from "@/components/floating-actions";
 import { items } from "@/lib/menu-data";
 import { cartStore } from "@/lib/cart-store";
@@ -761,7 +762,7 @@ function Location() {
 function HomePage() {
   return (
     <main className="pb-16 md:pb-0">
-      <Hero />
+      <ExplodedBurgerHero />
       <Marquee />
       <MenuSection />
       <SignatureBurger />
