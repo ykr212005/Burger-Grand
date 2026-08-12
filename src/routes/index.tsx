@@ -171,21 +171,22 @@ function Hero() {
       <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-6 lg:grid-cols-[1.05fr_1fr]">
         <motion.div style={{ y: textY, opacity: textOpacity }}>
           <Reveal>
-            <div className="eyebrow">Burger • Pizza • Shakes</div>
+            <div className="eyebrow">Burger Grand Nawada</div>
           </Reveal>
           <Reveal delay={0.05}>
             <h1 className="display-xl mt-5 text-[clamp(2.7rem,8vw,5.6rem)]">
-              Taste the
+              Bite Into
               <br />
-              <span className="text-primary">Extraordinary.</span>
+              <span className="text-primary">Grandeur.</span>
             </h1>
           </Reveal>
           <Reveal delay={0.1}>
             <p className="mt-6 max-w-md text-base leading-relaxed text-muted-foreground">
-              Fresh ingredients. Bigger bites. Unmatched flavour. Discover burgers,
-              pizzas, loaded fries and handcrafted shakes right near Nawada Metro.
+              Elevated comfort food, right here in Nawada. Hand-crafted burgers,
+              loaded fries, and premium shakes made fresh to order.
             </p>
           </Reveal>
+
 
           <Reveal delay={0.15}>
             <div className="mt-8 flex flex-wrap items-center gap-3">
