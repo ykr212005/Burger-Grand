@@ -221,17 +221,17 @@ export function ExplodedBurgerHero() {
 
   // camera / composition
   const stageScale = useTransform(tl, [0, 0.2, 0.6, 0.8, 1], [1, 1.02, 0.9, 0.9, 0.74]);
-  const stageY = useTransform(p, [0.8, 1], [0, -70]);
-  const stageXWide = useTransform(p, [0.25, 0.6], [0, -190]);
-  const stageXNarrow = useTransform(p, [0, 1], [0, 0]);
+  const stageY = useTransform(tl, [0.8, 1], [0, -70]);
+  const stageXWide = useTransform(tl, [0.25, 0.6], [0, -190]);
+  const stageXNarrow = useTransform(tl, [0, 1], [0, 0]);
   const stageX = wide ? stageXWide : stageXNarrow;
-  const stageOpacity = useTransform(p, [0.9, 1], [1, 0.25]);
-  const textY = useTransform(p, [0, 0.35, 1], [0, -40, -170]);
-  const textOpacity = useTransform(p, [0, 0.28, 0.45], [1, 1, 0]);
-  const labelOpacity = useTransform(p, [0.58, 0.68, 0.92, 1], [0, 1, 1, 0]);
-  const smokeOpacity = useTransform(p, [0, 0.2, 0.6, 0.85, 1], [0.35, 0.55, 1, 0.8, 0]);
-  const particleOpacity = useTransform(p, [0.15, 0.4, 0.85, 1], [0, 1, 0.9, 0]);
-  const hintOpacity = useTransform(p, [0, 0.12], [1, 0]);
+  const stageOpacity = useTransform(tl, [0.9, 1], [1, 0.25]);
+  const textY = useTransform(tl, [0, 0.35, 1], [0, -40, -170]);
+  const textOpacity = useTransform(tl, [0, 0.28, 0.45], [1, 1, 0]);
+  const labelOpacity = useTransform(tl, [0.58, 0.68, 0.92, 1], [0, 1, 1, 0]);
+  const smokeOpacity = useTransform(tl, [0, 0.2, 0.6, 0.85, 1], [0.35, 0.55, 1, 0.8, 0]);
+  const particleOpacity = useTransform(tl, [0.15, 0.4, 0.85, 1], [0, 1, 0.9, 0]);
+  const hintOpacity = useTransform(tl, [0, 0.12], [1, 0]);
 
   const mxRaw = useMotionValue(0);
   const myRaw = useMotionValue(0);
