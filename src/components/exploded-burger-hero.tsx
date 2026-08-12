@@ -215,8 +215,12 @@ export function ExplodedBurgerHero() {
       : { stiffness: 90, damping: 22, mass: 0.25, restDelta: 0.004 },
   );
 
+  // reduced motion: pin the timeline at 0 (assembled burger, no scrub)
+  const still = useMotionValue(0);
+  const tl = calm ? still : p;
+
   // camera / composition
-  const stageScale = useTransform(p, [0, 0.2, 0.6, 0.8, 1], [1, 1.02, 0.9, 0.9, 0.74]);
+  const stageScale = useTransform(tl, [0, 0.2, 0.6, 0.8, 1], [1, 1.02, 0.9, 0.9, 0.74]);
   const stageY = useTransform(p, [0.8, 1], [0, -70]);
   const stageXWide = useTransform(p, [0.25, 0.6], [0, -190]);
   const stageXNarrow = useTransform(p, [0, 1], [0, 0]);
