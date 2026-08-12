@@ -102,7 +102,7 @@
     line-height: 1.02;
   }
 
-  ::selection { background: var(--tomato); color: white; }
+  ::selection { background: var(--gold); color: oklch(0.16 0.006 60); }
 }
 
 @utility eyebrow {
@@ -110,15 +110,14 @@
   font-weight: 600;
   letter-spacing: 0.28em;
   text-transform: uppercase;
-  color: var(--brand-red);
+  color: var(--gold);
 }
 
 @utility display-xl {
   font-family: var(--font-display);
   font-weight: 700;
-  letter-spacing: -0.045em;
-  line-height: 0.92;
-  text-transform: uppercase;
+  letter-spacing: -0.025em;
+  line-height: 1;
 }
 
 @utility rule-line {
@@ -127,21 +126,22 @@
 }
 
 @utility surface {
-  background: var(--offwhite);
-  border: 1px solid color-mix(in oklab, var(--charcoal) 9%, transparent);
+  background: color-mix(in oklab, var(--charcoal) 5%, var(--offwhite));
+  border: 1px solid color-mix(in oklab, var(--charcoal) 11%, transparent);
 }
 
 @utility btn-primary {
-  background: var(--brand-red);
-  color: oklch(0.99 0.005 90);
+  background: var(--gold);
+  color: oklch(0.16 0.006 60);
   transition: transform .25s cubic-bezier(.2,.8,.2,1), background .25s ease, box-shadow .3s ease;
-  box-shadow: 0 10px 24px -14px oklch(0.453 0.148 27.5 / 0.9);
+  box-shadow: 0 10px 24px -14px oklch(0.815 0.128 82 / 0.7);
 }
 @utility btn-primary-hover {
-  background: var(--tomato);
+  background: color-mix(in oklab, var(--gold) 85%, white);
   transform: translateY(-2px);
-  box-shadow: 0 18px 34px -16px oklch(0.453 0.148 27.5 / 0.95);
+  box-shadow: 0 18px 34px -16px oklch(0.815 0.128 82 / 0.8);
 }
+
 
 @utility btn-ghost {
   border: 1px solid color-mix(in oklab, var(--charcoal) 22%, transparent);
