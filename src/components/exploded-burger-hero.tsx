@@ -253,7 +253,7 @@ export function ExplodedBurgerHero() {
           {/* stage */}
           <motion.div
             style={{ scale: stageScale, x: stageX, y: stageY, opacity: stageOpacity, rotate: desktop ? tilt : 0 }}
-            className="relative h-[58vh] w-full lg:h-[80vh]"
+            className="relative z-[60] order-1 h-full min-h-[46vh] w-full lg:order-2 lg:h-[80vh]"
           >
             <Smoke opacity={smokeOpacity} />
             <div className="absolute inset-0" style={{ perspective: 1200, transformStyle: "preserve-3d" }}>
@@ -263,9 +263,9 @@ export function ExplodedBurgerHero() {
             </div>
             <Particles opacity={particleOpacity} />
 
-            <motion.div style={{ x: mx, translateY: my }} className="absolute right-2 top-6 z-[95] sm:right-6">
-              <div className="flex h-20 w-20 animate-badge-float items-center justify-center rounded-full bg-accent text-center text-[9px] font-bold uppercase leading-tight tracking-[0.14em] text-ink shadow-card">
-                ★<br />Bestseller<br />{INR(90)}
+            <motion.div style={{ x: mx, translateY: my }} className="absolute left-2 top-2 z-[95] sm:left-6 sm:top-6">
+              <div className="animate-badge-float rounded-full bg-accent px-4 py-2 text-[10px] font-bold uppercase tracking-[0.2em] text-ink shadow-card">
+                Bestseller · {INR(90)}
               </div>
             </motion.div>
 
