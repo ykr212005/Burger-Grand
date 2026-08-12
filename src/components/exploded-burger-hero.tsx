@@ -258,12 +258,12 @@ export function ExplodedBurgerHero() {
             </div>
             <Particles opacity={particleOpacity} />
 
-            <motion.div
-              style={{ x: mx, translateY: my }}
-              className="absolute right-2 top-6 z-[95] flex h-20 w-20 animate-badge-float items-center justify-center rounded-full bg-accent text-center text-[9px] font-bold uppercase leading-tight tracking-[0.14em] text-ink shadow-card sm:right-6"
-            >
-              ★<br />Bestseller<br />{INR(90)}
+            <motion.div style={{ x: mx, translateY: my }} className="absolute right-2 top-6 z-[95] sm:right-6">
+              <div className="flex h-20 w-20 animate-badge-float items-center justify-center rounded-full bg-accent text-center text-[9px] font-bold uppercase leading-tight tracking-[0.14em] text-ink shadow-card">
+                ★<br />Bestseller<br />{INR(90)}
+              </div>
             </motion.div>
+
           </motion.div>
         </div>
 
