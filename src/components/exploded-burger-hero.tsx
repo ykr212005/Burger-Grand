@@ -213,9 +213,9 @@ export function ExplodedBurgerHero() {
       <div className="sticky top-0 h-screen overflow-hidden">
         <div className="pointer-events-none absolute left-1/2 top-1/2 h-[46rem] w-[46rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,_oklch(0.815_0.128_82_/_0.14),transparent_66%)]" />
 
-        <div className="relative mx-auto grid h-full max-w-7xl items-center gap-6 px-6 lg:grid-cols-[1fr_1.05fr]">
+        <div className="relative mx-auto grid h-full max-w-7xl grid-rows-[minmax(0,1fr)_auto] items-center gap-4 px-6 pb-10 pt-20 sm:gap-6 lg:grid-cols-[1fr_1.05fr] lg:grid-rows-1 lg:pb-0 lg:pt-0">
           {/* copy */}
-          <motion.div style={{ y: textY, opacity: textOpacity }} className="relative z-[90] pt-24 lg:pt-0">
+          <motion.div style={{ y: textY, opacity: textOpacity }} className="relative z-[20] order-2 lg:order-1 lg:z-[90] lg:pt-0">
             <div className="eyebrow">Burger Grand Nawada</div>
             <h1 className="display-xl mt-4 text-[clamp(2.4rem,7vw,5.2rem)]">
               Bite Into
