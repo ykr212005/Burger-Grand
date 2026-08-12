@@ -204,7 +204,7 @@ function Hero() {
                   key={m}
                   onClick={() => setMode(m)}
                   className={`rounded-full px-5 py-2 text-[11px] font-bold uppercase tracking-[0.16em] transition ${
-                    mode === m ? "bg-charcoal text-offwhite" : "text-muted-foreground hover:text-foreground"
+                    mode === m ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"
                   }`}
                 >
                   {m}
@@ -241,9 +241,9 @@ function Hero() {
               alt="The Grand double cheeseburger with melting cheese, lettuce and tomato"
               width={1200}
               height={1200}
-              className="w-full drop-shadow-[0_40px_50px_oklch(0.19_0.02_40_/_0.28)]"
+              className="w-full drop-shadow-[0_40px_50px_oklch(0_0_0_/_0.75)]"
             />
-            <div className="absolute left-0 top-8 rounded-full bg-charcoal px-4 py-2 text-[10px] font-bold uppercase tracking-[0.2em] text-offwhite">
+            <div className="absolute left-0 top-8 rounded-full bg-primary px-4 py-2 text-[10px] font-bold uppercase tracking-[0.2em] text-primary-foreground">
               Bestseller
             </div>
             <div className="absolute -bottom-2 right-2 rounded-full border border-border bg-offwhite px-4 py-2 text-[11px] font-bold uppercase tracking-[0.16em] shadow-card">
@@ -252,7 +252,7 @@ function Hero() {
           </motion.div>
 
           <video
-            className="pointer-events-none absolute -bottom-4 left-0 z-20 hidden h-36 w-56 border-4 border-offwhite object-cover shadow-lift sm:block"
+            className="pointer-events-none absolute -bottom-4 left-0 z-20 hidden h-36 w-56 border-4 border-foreground/15 object-cover shadow-lift sm:block"
             src={heroLoop.url}
             autoPlay
             muted
@@ -272,7 +272,7 @@ function Hero() {
 function Marquee() {
   const words = ["Fresh Ingredients", "Loaded Cheese", "Quick Service", "Great Value", "Made To Order", "Nawada Metro"];
   return (
-    <div className="border-y border-border bg-charcoal py-4 text-offwhite">
+    <div className="border-y border-border bg-ink py-4 text-foreground">
       <div className="flex w-max animate-marquee gap-10">
         {[0, 1].map((k) => (
           <div key={k} className="flex gap-10">
@@ -340,7 +340,7 @@ function MenuSection() {
                     className="h-56 w-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                   {it.popular && (
-                    <span className="absolute left-3 top-3 bg-charcoal px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-offwhite">
+                    <span className="absolute left-3 top-3 bg-primary px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-primary-foreground">
                       Bestseller
                     </span>
                   )}
@@ -485,7 +485,7 @@ function Bestsellers() {
   const nudge = (dir: number) => scroller.current?.scrollBy({ left: dir * 340, behavior: "smooth" });
 
   return (
-    <section className="bg-charcoal py-24 text-offwhite">
+    <section className="bg-ink py-24 text-foreground">
       <div className="mx-auto max-w-7xl px-6">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div className="max-w-xl">
@@ -493,10 +493,10 @@ function Bestsellers() {
             <h2 className="display-xl mt-4 text-[clamp(2rem,5vw,3.4rem)]">What everyone&apos;s ordering</h2>
           </div>
           <div className="flex gap-2">
-            <button onClick={() => nudge(-1)} aria-label="Previous" className="grid h-11 w-11 place-items-center rounded-full border border-offwhite/25 transition hover:bg-offwhite/10">
+            <button onClick={() => nudge(-1)} aria-label="Previous" className="grid h-11 w-11 place-items-center rounded-full border border-foreground/25 transition hover:bg-foreground/10">
               <ArrowLeft className="h-4 w-4" />
             </button>
-            <button onClick={() => nudge(1)} aria-label="Next" className="grid h-11 w-11 place-items-center rounded-full border border-offwhite/25 transition hover:bg-offwhite/10">
+            <button onClick={() => nudge(1)} aria-label="Next" className="grid h-11 w-11 place-items-center rounded-full border border-foreground/25 transition hover:bg-foreground/10">
               <ArrowRight className="h-4 w-4" />
             </button>
           </div>
@@ -507,7 +507,7 @@ function Bestsellers() {
             <article key={it.name} className="w-[19rem] shrink-0 snap-start">
               <div className="relative overflow-hidden">
                 <img src={it.img} alt={it.name} loading="lazy" width={800} height={600} className="h-48 w-full object-cover" />
-                <span className="absolute left-3 top-3 bg-accent px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-charcoal">
+                <span className="absolute left-3 top-3 bg-accent px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-primary-foreground">
                   #{String(i + 1).padStart(2, "0")}
                 </span>
               </div>
@@ -515,7 +515,7 @@ function Bestsellers() {
                 <h3 className="font-display text-base font-bold uppercase">{it.name}</h3>
                 <span className="font-display font-bold text-accent">{INR(it.price)}</span>
               </div>
-              <p className="mt-1 flex items-center gap-1 text-xs text-offwhite/60">
+              <p className="mt-1 flex items-center gap-1 text-xs text-foreground/60">
                 <Star className="h-3.5 w-3.5 fill-accent text-accent" /> {it.rating} · {it.category}
               </p>
               <div className="mt-4"><AddButton name={it.name} compact /></div>
@@ -653,7 +653,7 @@ function Gallery() {
             <Reveal key={g.cap} delay={i * 0.04}>
               <figure className={`group relative overflow-hidden ${i % 5 === 0 ? "md:row-span-2 md:h-[32rem]" : "h-[15.5rem]"}`}>
                 <img src={g.img} alt={g.cap} loading="lazy" width={800} height={800} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
-                <figcaption className="absolute inset-x-0 bottom-0 translate-y-full bg-charcoal/80 px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.16em] text-offwhite transition-transform duration-400 group-hover:translate-y-0">
+                <figcaption className="absolute inset-x-0 bottom-0 translate-y-full bg-ink/85 px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.16em] text-offwhite transition-transform duration-400 group-hover:translate-y-0">
                   {g.cap}
                 </figcaption>
               </figure>

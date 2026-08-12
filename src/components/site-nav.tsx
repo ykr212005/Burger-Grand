@@ -38,7 +38,7 @@ export function SiteNav() {
       <header
         className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
           scrolled
-            ? "border-b border-border bg-[oklch(0.988_0.008_90_/_0.92)] backdrop-blur-md shadow-[0_10px_30px_-24px_oklch(0.19_0.02_40_/_0.6)]"
+            ? "border-b border-border bg-[oklch(0.16_0.005_60_/_0.88)] backdrop-blur-md shadow-[0_10px_30px_-24px_oklch(0.19_0.02_40_/_0.6)]"
             : "bg-transparent"
         }`}
       >

@@ -68,7 +68,7 @@ function MenuPage() {
         </div>
       </section>
 
-      <div className="sticky top-[64px] z-30 border-y border-border bg-[oklch(0.988_0.008_90_/_0.95)] backdrop-blur">
+      <div className="sticky top-[64px] z-30 border-y border-border bg-[oklch(0.175_0.005_60_/_0.92)] backdrop-blur">
         <div className="mx-auto flex max-w-7xl gap-2 overflow-x-auto px-6 py-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {categories.map((c) => (
             <button
@@ -133,7 +133,7 @@ function MenuPage() {
                           <button onClick={() => cartStore.remove(it.name)} className="underline hover:text-primary">remove</button>
                         </span>
                       )}
-                      {it.popular && <span className="ml-auto bg-accent px-2 py-1 text-[9px] font-bold uppercase tracking-[0.16em] text-charcoal">Bestseller</span>}
+                      {it.popular && <span className="ml-auto bg-accent px-2 py-1 text-[9px] font-bold uppercase tracking-[0.16em] text-primary-foreground">Bestseller</span>}
                     </div>
                   </div>
                 </motion.article>
