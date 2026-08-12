@@ -163,9 +163,10 @@ function Hero() {
         my.set(((e.clientY - r.top) / r.height - 0.5) * 20);
       }}
       onMouseLeave={() => { mx.set(0); my.set(0); }}
-      className="relative overflow-hidden bg-cream pt-28 pb-16 sm:pt-32 lg:pt-36"
+      className="relative overflow-hidden bg-ink pt-28 pb-16 sm:pt-32 lg:pt-36"
     >
-      <div className="pointer-events-none absolute -right-32 top-10 h-[36rem] w-[36rem] rounded-full bg-[radial-gradient(circle,_oklch(0.816_0.129_84_/_0.34),transparent_65%)]" />
+      <div className="pointer-events-none absolute -right-32 top-10 h-[36rem] w-[36rem] rounded-full bg-[radial-gradient(circle,_oklch(0.815_0.128_82_/_0.16),transparent_65%)]" />
+
 
       <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-6 lg:grid-cols-[1.05fr_1fr]">
         <motion.div style={{ y: textY, opacity: textOpacity }}>
