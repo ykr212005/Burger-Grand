@@ -5,7 +5,7 @@ import { restaurant, whatsappLink } from "@/lib/restaurant";
 
 export function SiteFooter() {
   return (
-    <footer className="bg-charcoal text-[oklch(0.95_0.01_85)]">
+    <footer className="bg-ink text-[oklch(0.95_0.01_85)]">
       <div className="mx-auto max-w-7xl px-6 py-20">
         <div className="grid gap-14 md:grid-cols-[1.4fr_1fr_1fr]">
           <div>

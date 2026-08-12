@@ -80,7 +80,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "Burger Grand serves handcrafted burgers, wood-fired pizzas, crispy sandwiches, fresh wraps, thick shakes and indulgent sundaes made with premium ingredients.",
       },
       { name: "author", content: "Burger Grand" },
-      { name: "theme-color", content: "#FFF7EA" },
+      { name: "theme-color", content: "#0B0A09" },
       { property: "og:title", content: "Burger Grand — Fresh. Hot. Loaded With Flavor." },
       { property: "og:description", content: "Handcrafted burgers, pizzas, shakes and sundaes made with premium ingredients." },
       { property: "og:type", content: "website" },
@@ -93,7 +93,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap",
       },
     ],
   }),
