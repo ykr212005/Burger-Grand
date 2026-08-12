@@ -184,21 +184,36 @@ function Particles({ opacity, reduced }: { opacity: MotionValue<number>; reduced
 export function ExplodedBurgerHero() {
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
-  const p = useSpring(scrollYProgress, { stiffness: 120, damping: 26, mass: 0.4, restDelta: 0.0005 });
 
   const [desktop, setDesktop] = useState(false);
   const [wide, setWide] = useState(false);
+  const [calm, setCalm] = useState(false);
   const [open, setOpen] = useState(true);
   useEffect(() => {
     setOpen(isOpenNow());
     const mq = window.matchMedia("(min-width: 1024px) and (pointer: fine)");
     const mqWide = window.matchMedia("(min-width: 1024px)");
-    const on = () => { setDesktop(mq.matches); setWide(mqWide.matches); };
+    const mqCalm = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const on = () => { setDesktop(mq.matches); setWide(mqWide.matches); setCalm(mqCalm.matches); };
     on();
     mq.addEventListener("change", on);
     mqWide.addEventListener("change", on);
-    return () => { mq.removeEventListener("change", on); mqWide.removeEventListener("change", on); };
+    mqCalm.addEventListener("change", on);
+    return () => {
+      mq.removeEventListener("change", on);
+      mqWide.removeEventListener("change", on);
+      mqCalm.removeEventListener("change", on);
+    };
   }, []);
+
+  // lighter spring (and a coarser rest threshold) on touch devices keeps the
+  // scrub cheap enough to hold 60fps on phones
+  const p = useSpring(
+    scrollYProgress,
+    desktop
+      ? { stiffness: 120, damping: 26, mass: 0.4, restDelta: 0.0005 }
+      : { stiffness: 90, damping: 22, mass: 0.25, restDelta: 0.004 },
+  );
 
   // camera / composition
   const stageScale = useTransform(p, [0, 0.2, 0.6, 0.8, 1], [1, 1.02, 0.9, 0.9, 0.74]);
