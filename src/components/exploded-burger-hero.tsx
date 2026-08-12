@@ -201,8 +201,7 @@ export function ExplodedBurgerHero() {
   return (
     <section
       ref={ref}
-      className="relative bg-ink"
-      style={{ height: "250vh" }}
+      className="relative h-[200vh] bg-ink lg:h-[250vh]"
       onMouseMove={(e) => {
         if (!desktop) return;
         const r = e.currentTarget.getBoundingClientRect();
