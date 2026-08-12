@@ -103,7 +103,9 @@ function LayerPiece({
         )}
       </div>
     </motion.div>
+    </div>
   );
+
 }
 
 function Smoke({ opacity }: { opacity: MotionValue<number> }) {
