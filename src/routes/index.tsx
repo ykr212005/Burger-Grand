@@ -16,7 +16,7 @@ import sundaeImg from "@/assets/sundae.jpg";
 import sandwichImg from "@/assets/sandwich.jpg";
 import interiorImg from "@/assets/interior.jpg";
 import comboImg from "@/assets/combo.jpg";
-import heroLoop from "@/assets/hero-loop.mp4.asset.json";
+
 
 import { SiteFooter } from "@/components/site-footer";
 import { FloatingActions } from "@/components/floating-actions";
@@ -253,16 +253,6 @@ function Hero() {
             </div>
           </motion.div>
 
-          <video
-            className="pointer-events-none absolute -bottom-4 left-0 z-20 hidden h-36 w-56 border-4 border-foreground/15 object-cover shadow-lift sm:block"
-            src={heroLoop.url}
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="metadata"
-            aria-hidden="true"
-          />
         </div>
       </div>
     </section>
