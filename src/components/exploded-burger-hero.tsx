@@ -60,6 +60,7 @@ function LayerPiece({
   labelOpacity,
   showLabels,
   spread = 1,
+  rich = true,
 }: {
   layer: Layer;
   p: MotionValue<number>;
@@ -68,6 +69,8 @@ function LayerPiece({
   labelOpacity: MotionValue<number>;
   showLabels: boolean;
   spread?: number;
+  /** enable 3D depth + mouse parallax (desktop only) */
+  rich?: boolean;
 }) {
   const base = layer.base * spread;
   const travel = layer.travel * spread;
@@ -79,19 +82,31 @@ function LayerPiece({
   const px = useTransform(mx, (v) => v * layer.depth);
   const py = useTransform(my, (v) => v * layer.depth);
 
+  const style = rich
+    ? { y, x: px, translateY: py, rotate, rotateX, translateZ: zpx, zIndex: layer.z }
+    : { y, rotate, zIndex: layer.z };
+
   return (
     <div className="pointer-events-none absolute inset-0 grid place-items-center">
-    <motion.div
-      style={{ y, x: px, translateY: py, rotate, rotateX, translateZ: zpx, zIndex: layer.z }}
-    >
+    <motion.div style={style}>
 
-      <div className="relative" style={{ width: `${layer.w * 8}px`, maxWidth: "68vw", willChange: "transform" }}>
+      <div
+        className="relative"
+        style={{
+          width: `${layer.w * 8}px`,
+          maxWidth: "68vw",
+          willChange: "transform",
+          backfaceVisibility: "hidden",
+        }}
+      >
         <img
           src={layer.src}
           alt={layer.alt}
-          className="w-full select-none drop-shadow-[0_18px_26px_oklch(0_0_0_/_0.6)]"
+          className={`w-full select-none ${rich ? "drop-shadow-[0_18px_26px_oklch(0_0_0_/_0.6)]" : "drop-shadow-[0_8px_10px_oklch(0_0_0_/_0.55)]"}`}
           draggable={false}
+          decoding="async"
         />
+
         {showLabels && layer.label && (
           <motion.div
             style={{ opacity: labelOpacity }}
