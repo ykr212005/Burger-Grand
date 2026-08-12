@@ -81,7 +81,7 @@ function LayerPiece({
       style={{ y, x: px, translateY: py, rotate, rotateX, translateZ: zpx, zIndex: layer.z }}
     >
 
-      <div className="relative" style={{ width: `${layer.w * 8}px`, maxWidth: "60vw" }}>
+      <div className="relative" style={{ width: `${layer.w * 8}px`, maxWidth: "68vw", willChange: "transform" }}>
         <img
           src={layer.src}
           alt={layer.alt}
@@ -136,10 +136,10 @@ const PARTICLES = [
   { x: 20, y: 48, s: 3, d: 4 }, { x: 58, y: 88, s: 4, d: 1.1 },
 ];
 
-function Particles({ opacity }: { opacity: MotionValue<number> }) {
+function Particles({ opacity, reduced }: { opacity: MotionValue<number>; reduced?: boolean }) {
   return (
     <motion.div style={{ opacity }} className="pointer-events-none absolute inset-0 z-[80]">
-      {PARTICLES.map((p, i) => (
+      {(reduced ? PARTICLES.slice(0, 4) : PARTICLES).map((p, i) => (
         <span
           key={i}
           className="absolute rounded-full animate-particle-float"
@@ -261,7 +261,7 @@ export function ExplodedBurgerHero() {
                 <LayerPiece key={l.key} layer={l} p={p} mx={mx} my={my} labelOpacity={labelOpacity} showLabels={desktop} />
               ))}
             </div>
-            <Particles opacity={particleOpacity} />
+            <Particles opacity={particleOpacity} reduced={!wide} />
 
             <motion.div style={{ x: mx, translateY: my }} className="absolute left-2 top-2 z-[95] sm:left-6 sm:top-6">
               <div className="animate-badge-float rounded-full bg-accent px-4 py-2 text-[10px] font-bold uppercase tracking-[0.2em] text-ink shadow-card">
