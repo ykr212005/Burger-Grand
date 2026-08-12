@@ -296,10 +296,27 @@ export function ExplodedBurgerHero() {
             style={{ scale: stageScale, x: stageX, y: stageY, opacity: stageOpacity, rotate: desktop ? tilt : 0 }}
             className="relative z-[60] order-1 h-full w-full lg:order-2 lg:h-[80vh]"
           >
-            <Smoke opacity={smokeOpacity} />
-            <div className="absolute inset-0" style={{ perspective: 1200, transformStyle: "preserve-3d" }}>
+            <Smoke opacity={smokeOpacity} reduced={!desktop} />
+            <div
+              className="absolute inset-0"
+              style={
+                desktop
+                  ? { perspective: 1200, transformStyle: "preserve-3d", contain: "paint" }
+                  : { contain: "paint" }
+              }
+            >
               {LAYERS.map((l) => (
-                <LayerPiece key={l.key} layer={l} p={p} mx={mx} my={my} labelOpacity={labelOpacity} showLabels={desktop} spread={wide ? 1 : 0.55} />
+                <LayerPiece
+                  key={l.key}
+                  layer={l}
+                  p={tl}
+                  mx={mx}
+                  my={my}
+                  labelOpacity={labelOpacity}
+                  showLabels={desktop}
+                  spread={wide ? 1 : 0.55}
+                  rich={desktop}
+                />
               ))}
             </div>
             <Particles opacity={particleOpacity} reduced={!wide} />
