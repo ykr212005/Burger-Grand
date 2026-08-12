@@ -59,6 +59,7 @@ function LayerPiece({
   my,
   labelOpacity,
   showLabels,
+  spread = 1,
 }: {
   layer: Layer;
   p: MotionValue<number>;
@@ -66,9 +67,12 @@ function LayerPiece({
   my: MotionValue<number>;
   labelOpacity: MotionValue<number>;
   showLabels: boolean;
+  spread?: number;
 }) {
+  const base = layer.base * spread;
+  const travel = layer.travel * spread;
   // explosion runs 0.20 -> 0.60, held to 0.80, then eases away
-  const y = useTransform(p, [0, 0.2, 0.6, 0.8, 1], [layer.base, layer.base, layer.base + layer.travel, layer.base + layer.travel, layer.base + layer.travel * 0.86]);
+  const y = useTransform(p, [0, 0.2, 0.6, 0.8, 1], [base, base, base + travel, base + travel, base + travel * 0.86]);
   const rotate = useTransform(p, [0.2, 0.6, 1], [0, layer.rot, layer.rot * 0.7]);
   const rotateX = useTransform(p, [0.2, 0.6], [0, layer.rot * 1.6]);
   const zpx = useTransform(p, [0.2, 0.6], [0, layer.depth * 90]);
@@ -258,12 +262,12 @@ export function ExplodedBurgerHero() {
             <Smoke opacity={smokeOpacity} />
             <div className="absolute inset-0" style={{ perspective: 1200, transformStyle: "preserve-3d" }}>
               {LAYERS.map((l) => (
-                <LayerPiece key={l.key} layer={l} p={p} mx={mx} my={my} labelOpacity={labelOpacity} showLabels={desktop} />
+                <LayerPiece key={l.key} layer={l} p={p} mx={mx} my={my} labelOpacity={labelOpacity} showLabels={desktop} spread={wide ? 1 : 0.5} />
               ))}
             </div>
             <Particles opacity={particleOpacity} reduced={!wide} />
 
-            <motion.div style={{ x: mx, translateY: my }} className="absolute left-2 top-2 z-[95] sm:left-6 sm:top-6">
+            <motion.div style={{ x: mx, translateY: my }} className="absolute left-2 top-16 z-[95] sm:left-6 sm:top-6">
               <div className="animate-badge-float rounded-full bg-accent px-4 py-2 text-[10px] font-bold uppercase tracking-[0.2em] text-ink shadow-card">
                 Bestseller · {INR(90)}
               </div>
