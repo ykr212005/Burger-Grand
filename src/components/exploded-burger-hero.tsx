@@ -161,7 +161,7 @@ const PARTICLES = [
 function Particles({ opacity, reduced }: { opacity: MotionValue<number>; reduced?: boolean }) {
   return (
     <motion.div style={{ opacity }} className="pointer-events-none absolute inset-0 z-[80]">
-      {(reduced ? PARTICLES.slice(0, 4) : PARTICLES).map((p, i) => (
+      {(reduced ? PARTICLES.slice(0, 3) : PARTICLES).map((p, i) => (
         <span
           key={i}
           className="absolute rounded-full animate-particle-float"
