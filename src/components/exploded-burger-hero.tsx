@@ -217,7 +217,7 @@ export function ExplodedBurgerHero() {
       <div className="sticky top-0 h-screen overflow-hidden">
         <div className="pointer-events-none absolute left-1/2 top-1/2 h-[46rem] w-[46rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,_oklch(0.815_0.128_82_/_0.14),transparent_66%)]" />
 
-        <div className="relative mx-auto grid h-full max-w-7xl grid-rows-[minmax(0,1fr)_auto] items-center gap-4 px-6 pb-10 pt-20 sm:gap-6 lg:grid-cols-[1fr_1.05fr] lg:grid-rows-1 lg:pb-0 lg:pt-0">
+        <div className="relative mx-auto grid h-full max-w-7xl grid-rows-[62vh_auto] items-center gap-2 px-6 pb-8 pt-14 sm:gap-6 lg:grid-cols-[1fr_1.05fr] lg:grid-rows-1 lg:pb-0 lg:pt-0">
           {/* copy */}
           <motion.div style={{ y: textY, opacity: textOpacity }} className="relative z-[20] order-2 lg:order-1 lg:z-[90] lg:pt-0">
             <div className="eyebrow">Burger Grand Nawada</div>
@@ -257,12 +257,12 @@ export function ExplodedBurgerHero() {
           {/* stage */}
           <motion.div
             style={{ scale: stageScale, x: stageX, y: stageY, opacity: stageOpacity, rotate: desktop ? tilt : 0 }}
-            className="relative z-[60] order-1 h-full min-h-[46vh] w-full lg:order-2 lg:h-[80vh]"
+            className="relative z-[60] order-1 h-full w-full lg:order-2 lg:h-[80vh]"
           >
             <Smoke opacity={smokeOpacity} />
             <div className="absolute inset-0" style={{ perspective: 1200, transformStyle: "preserve-3d" }}>
               {LAYERS.map((l) => (
-                <LayerPiece key={l.key} layer={l} p={p} mx={mx} my={my} labelOpacity={labelOpacity} showLabels={desktop} spread={wide ? 1 : 0.5} />
+                <LayerPiece key={l.key} layer={l} p={p} mx={mx} my={my} labelOpacity={labelOpacity} showLabels={desktop} spread={wide ? 1 : 0.55} />
               ))}
             </div>
             <Particles opacity={particleOpacity} reduced={!wide} />
