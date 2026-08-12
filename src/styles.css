@@ -166,9 +166,27 @@
   50% { transform: translateY(-12px); }
 }
 
+@keyframes smoke-drift {
+  0%   { transform: translate3d(-50%, 20px, 0) scale(0.8); opacity: 0; }
+  25%  { opacity: 0.9; }
+  100% { transform: translate3d(calc(-50% + 26px), -220px, 0) scale(1.5); opacity: 0; }
+}
+@keyframes particle-float {
+  0%, 100% { transform: translate3d(0, 0, 0); opacity: 0.35; }
+  50%      { transform: translate3d(8px, -26px, 0); opacity: 1; }
+}
+@keyframes badge-float {
+  0%, 100% { transform: translateY(0) rotate(-6deg); }
+  50%      { transform: translateY(-10px) rotate(6deg); }
+}
+
 @utility animate-marquee { animation: marquee 38s linear infinite; }
 @utility animate-pulse-dot { animation: pulse-dot 2s ease-in-out infinite; }
 @utility animate-float-soft { animation: float-soft 7s ease-in-out infinite; }
+@utility animate-smoke-drift { animation: smoke-drift 11s ease-in-out infinite; }
+@utility animate-particle-float { animation: particle-float 9s ease-in-out infinite; }
+@utility animate-badge-float { animation: badge-float 9s ease-in-out infinite; }
+
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
