@@ -5,6 +5,7 @@ import { ArrowRight, Star } from "lucide-react";
 
 import heroScroll from "@/assets/hero-scrub.mp4.asset.json";
 import heroScrollMobile from "@/assets/hero-mobile-fixed.mp4.asset.json";
+import heroScrollMobileWebm from "@/assets/hero-mobile-fixed.webm.asset.json";
 import heroPoster from "@/assets/hero-poster.jpg.asset.json";
 import heroPosterMobile from "@/assets/hero-mobile-poster.jpg.asset.json";
 import { INR, isOpenNow, restaurant } from "@/lib/restaurant";
@@ -35,8 +36,15 @@ export function ExplodedBurgerHero() {
       setCalm(mqCalm.matches);
     };
     on();
-    // lighter, all-intra encode on phones so every seek decodes instantly
-    setSrc(window.innerWidth < 1024 ? heroScrollMobile.url : heroScroll.url);
+    // Each mobile frame is independently seekable. WebM covers Android and
+    // Chromium; MP4 remains the native iOS/Safari fallback.
+    if (window.innerWidth < 1024) {
+      const probe = document.createElement("video");
+      const supportsWebm = probe.canPlayType('video/webm; codecs="vp9"') !== "";
+      setSrc(supportsWebm ? heroScrollMobileWebm.url : heroScrollMobile.url);
+    } else {
+      setSrc(heroScroll.url);
+    }
     mq.addEventListener("change", on);
     mqCalm.addEventListener("change", on);
     return () => {
@@ -129,7 +137,7 @@ export function ExplodedBurgerHero() {
   return (
     <section
       ref={ref}
-      className="relative h-[200vh] bg-ink lg:h-[250vh]"
+      className="relative h-[300dvh] bg-ink lg:h-[250vh]"
       onMouseMove={(e) => {
         if (!desktop) return;
         const r = e.currentTarget.getBoundingClientRect();
