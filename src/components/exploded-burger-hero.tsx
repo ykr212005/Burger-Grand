@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { ArrowRight, Star } from "lucide-react";
 
 import heroScroll from "@/assets/hero-scrub.mp4.asset.json";
+import heroScrollMobile from "@/assets/hero-scrub-mobile.mp4.asset.json";
 import heroPoster from "@/assets/hero-poster.jpg.asset.json";
 import { INR, isOpenNow, restaurant } from "@/lib/restaurant";
 
@@ -50,6 +51,7 @@ export function ExplodedBurgerHero() {
   // once; force a muted play/pause (and retry on the first user gesture) so
   // the frames exist and scroll seeking actually paints.
   useEffect(() => {
+    if (!src) return;
     const v = videoRef.current;
     if (!v) return;
     let done = false;
@@ -73,7 +75,7 @@ export function ExplodedBurgerHero() {
     evts.forEach((e) => window.addEventListener(e, unlock, { passive: true }));
     void unlock();
     return detach;
-  }, []);
+  }, [src]);
 
   // drive the video playhead from the scrubbed timeline
   useEffect(() => {
@@ -201,7 +203,8 @@ export function ExplodedBurgerHero() {
             >
               <video
                 ref={videoRef}
-                src={heroScroll.url}
+                {...(src ? { src } : {})}
+                key={src ?? "pending"}
                 poster={heroPoster.url}
                 className="h-full w-full object-cover"
                 muted
