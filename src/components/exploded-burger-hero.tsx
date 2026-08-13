@@ -3,7 +3,8 @@ import { motion, useMotionValue, useScroll, useSpring, useTransform } from "fram
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight, Star } from "lucide-react";
 
-import heroScroll from "@/assets/hero-scroll.mp4.asset.json";
+import heroScroll from "@/assets/hero-scrub.mp4.asset.json";
+import heroPoster from "@/assets/hero-poster.jpg.asset.json";
 import { INR, isOpenNow, restaurant } from "@/lib/restaurant";
 
 /**
