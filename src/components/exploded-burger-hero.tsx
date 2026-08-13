@@ -42,6 +42,35 @@ export function ExplodedBurgerHero() {
   const still = useMotionValue(0);
   const tl = calm ? still : p;
 
+  // mobile browsers never decode a paused <video> until it has been played
+  // once; force a muted play/pause (and retry on the first user gesture) so
+  // the frames exist and scroll seeking actually paints.
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v) return;
+    let done = false;
+    const unlock = async () => {
+      if (done || !videoRef.current) return;
+      const el = videoRef.current;
+      try {
+        if (el.readyState === 0) el.load();
+        el.muted = true;
+        await el.play();
+        el.pause();
+        el.currentTime = 0.001;
+        done = true;
+        detach();
+      } catch {
+        /* needs a gesture — listeners below will retry */
+      }
+    };
+    const evts = ["touchstart", "pointerdown", "scroll", "wheel", "keydown"] as const;
+    const detach = () => evts.forEach((e) => window.removeEventListener(e, unlock));
+    evts.forEach((e) => window.addEventListener(e, unlock, { passive: true }));
+    void unlock();
+    return detach;
+  }, []);
+
   // drive the video playhead from the scrubbed timeline
   useEffect(() => {
     if (calm) return;
@@ -53,7 +82,8 @@ export function ExplodedBurgerHero() {
     let seeking = false;
     const loop = () => {
       const v = videoRef.current;
-      if (v && v.readyState >= 2 && Number.isFinite(v.duration) && !seeking) {
+      if (v && v.readyState >= 1 && Number.isFinite(v.duration) && !seeking) {
+        if (!v.paused) v.pause();
         const next = target * (v.duration - 0.05);
         const cur = v.currentTime;
         if (Math.abs(cur - next) > 1 / 60) {
@@ -74,9 +104,9 @@ export function ExplodedBurgerHero() {
     return () => {
       cancelAnimationFrame(raf);
       unsub();
-      cancelAnimationFrame(raf);
     };
   }, [tl, calm]);
+
 
   const stageScale = useTransform(tl, [0, 0.6, 1], [1.04, 1, 0.94]);
   const stageOpacity = useTransform(tl, [0, 0.05, 0.9, 1], [0.9, 1, 1, 0.3]);
