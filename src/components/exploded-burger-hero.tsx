@@ -4,8 +4,9 @@ import { useEffect, useRef, useState } from "react";
 import { ArrowRight, Star } from "lucide-react";
 
 import heroScroll from "@/assets/hero-scrub.mp4.asset.json";
-import heroScrollMobile from "@/assets/hero-scrub-mobile.mp4.asset.json";
+import heroScrollMobile from "@/assets/hero-mobile-fixed.mp4.asset.json";
 import heroPoster from "@/assets/hero-poster.jpg.asset.json";
+import heroPosterMobile from "@/assets/hero-mobile-poster.jpg.asset.json";
 import { INR, isOpenNow, restaurant } from "@/lib/restaurant";
 
 /**
@@ -16,6 +17,8 @@ import { INR, isOpenNow, restaurant } from "@/lib/restaurant";
 export function ExplodedBurgerHero() {
   const ref = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const targetTimeRef = useRef(0);
+  const videoReadyRef = useRef(false);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
 
   const [desktop, setDesktop] = useState(false);
@@ -77,31 +80,29 @@ export function ExplodedBurgerHero() {
     return detach;
   }, [src]);
 
-  // drive the video playhead from the scrubbed timeline
+  // Drive the playhead from scroll. Do not wait for `seeked`: iOS can omit
+  // that event for tiny seeks, which previously left the mobile loop locked.
   useEffect(() => {
     if (calm) return;
     let raf = 0;
-    let target = 0;
-    const unsub = tl.on("change", (v) => {
-      target = Math.min(Math.max(v, 0), 1);
-    });
-    let seeking = false;
+    const updateTarget = (progress: number) => {
+      const video = videoRef.current;
+      const normalized = Math.min(Math.max(progress, 0), 1);
+      targetTimeRef.current = video && Number.isFinite(video.duration)
+        ? normalized * Math.max(video.duration - 0.04, 0)
+        : normalized;
+    };
+    updateTarget(tl.get());
+    const unsub = tl.on("change", updateTarget);
+
     const loop = () => {
-      const v = videoRef.current;
-      if (v && v.readyState >= 1 && Number.isFinite(v.duration) && !seeking) {
-        if (!v.paused) v.pause();
-        const next = target * (v.duration - 0.05);
-        const cur = v.currentTime;
-        if (Math.abs(cur - next) > 1 / 60) {
-          // ease toward the target so fast scrolls stay fluid instead of snapping
-          const eased = cur + (next - cur) * 0.35;
-          seeking = true;
-          v.currentTime = eased;
-          const done = () => {
-            seeking = false;
-            v.removeEventListener("seeked", done);
-          };
-          v.addEventListener("seeked", done);
+      const video = videoRef.current;
+      if (video && videoReadyRef.current && Number.isFinite(video.duration)) {
+        const target = targetTimeRef.current <= 1
+          ? targetTimeRef.current * Math.max(video.duration - 0.04, 0)
+          : targetTimeRef.current;
+        if (Math.abs(video.currentTime - target) > 1 / 30) {
+          video.currentTime = target;
         }
       }
       raf = requestAnimationFrame(loop);
@@ -140,14 +141,16 @@ export function ExplodedBurgerHero() {
         myRaw.set(0);
       }}
     >
-      <div className="sticky top-0 h-screen overflow-hidden">
-        <div className="pointer-events-none absolute left-1/2 top-1/2 h-[46rem] w-[46rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,_oklch(0.815_0.128_82_/_0.14),transparent_66%)]" />
+      <div className="sticky top-0 h-[100dvh] min-h-[32rem]">
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="pointer-events-none absolute left-1/2 top-1/2 h-[46rem] w-[46rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,_oklch(0.815_0.128_82_/_0.14),transparent_66%)]" />
+        </div>
 
         <div className="relative mx-auto grid h-full max-w-7xl grid-rows-[58vh_auto] items-center gap-2 px-6 pb-8 pt-14 sm:gap-6 lg:grid-cols-[1fr_1.05fr] lg:grid-rows-1 lg:pb-0 lg:pt-0">
           {/* copy */}
           <motion.div
             style={{ y: textY, opacity: textOpacity }}
-            className="relative z-[20] order-2 lg:order-1 lg:z-[90]"
+            className="relative z-[70] order-2 lg:order-1 lg:z-[90]"
           >
             <div className="eyebrow">Burger Grand Nawada</div>
             <h1 className="display-xl mt-4 text-[clamp(2.4rem,7vw,5.2rem)]">
@@ -205,13 +208,19 @@ export function ExplodedBurgerHero() {
                 ref={videoRef}
                 {...(src ? { src } : {})}
                 key={src ?? "pending"}
-                poster={heroPoster.url}
+                poster={desktop ? heroPoster.url : heroPosterMobile.url}
                 className="h-full w-full object-cover"
                 muted
                 playsInline
                 preload="auto"
                 autoPlay={false}
                 disablePictureInPicture
+                onLoadedMetadata={(event) => {
+                  videoReadyRef.current = true;
+                  const progress = tl.get();
+                  targetTimeRef.current = progress * Math.max(event.currentTarget.duration - 0.04, 0);
+                  event.currentTarget.currentTime = targetTimeRef.current;
+                }}
                 aria-label="The Grand burger being assembled"
               />
               <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,_oklch(0.145_0.004_60_/_0.75),transparent_45%)]" />
