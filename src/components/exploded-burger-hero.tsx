@@ -1,243 +1,80 @@
 import { Link } from "@tanstack/react-router";
-import {
-  motion,
-  useMotionValue,
-  useScroll,
-  useSpring,
-  useTransform,
-  type MotionValue,
-} from "framer-motion";
+import { motion, useMotionValue, useScroll, useSpring, useTransform } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight, Star } from "lucide-react";
 
-import topBun from "@/assets/layer-topbun.png";
-import lettuce from "@/assets/layer-lettuce.png";
-import tomato from "@/assets/layer-tomato.png";
-import onion from "@/assets/layer-onion.png";
-import cheese from "@/assets/layer-cheese.png";
-import patty from "@/assets/layer-patty.png";
-import bottomBun from "@/assets/layer-bottombun.png";
-
+import heroScroll from "@/assets/hero-scroll.mp4.asset.json";
 import { INR, isOpenNow, restaurant } from "@/lib/restaurant";
 
-/* ------------------------------ layer config ------------------------------ */
-
-type Layer = {
-  key: string;
-  src: string;
-  alt: string;
-  /** assembled Y offset in px (0 = stack centre) */
-  base: number;
-  /** additional Y travel at full explosion (negative = up) */
-  travel: number;
-  /** width as % of the stage */
-  w: number;
-  rot: number;
-  z: number;
-  depth: number; // parallax multiplier
-  label?: string;
-  /** vertical anchor of the label line, 0..1 of stage */
-  side?: "left" | "right";
-};
-
-const LAYERS: Layer[] = [
-  { key: "topbun", src: topBun, alt: "Toasted sesame brioche top bun", base: -104, travel: -150, w: 62, rot: -3, z: 70, depth: 1.0, label: "Toasted Bun", side: "right" },
-  { key: "lettuce", src: lettuce, alt: "Fresh green lettuce", base: -58, travel: -90, w: 66, rot: 2.5, z: 60, depth: 0.85, label: "Fresh Lettuce", side: "left" },
-  { key: "tomato", src: tomato, alt: "Fresh tomato slices", base: -34, travel: -55, w: 54, rot: -2, z: 50, depth: 0.7, label: "Vine Tomato", side: "right" },
-  { key: "onion", src: onion, alt: "Onion rings", base: -14, travel: -30, w: 50, rot: 3, z: 40, depth: 0.6, label: "Sweet Onion", side: "left" },
-  { key: "cheese", src: cheese, alt: "Melted cheddar cheese", base: 4, travel: -10, w: 46, rot: -4, z: 30, depth: 0.5, label: "Melted Cheese", side: "right" },
-  { key: "patty", src: patty, alt: "Juicy grilled patty", base: 34, travel: 10, w: 60, rot: 2, z: 20, depth: 0.45, label: "Juicy Patty", side: "left" },
-  { key: "bottombun", src: bottomBun, alt: "Toasted bottom bun with signature sauce", base: 96, travel: 120, w: 62, rot: -2, z: 10, depth: 0.35, label: "Signature Sauce", side: "right" },
-];
-
-/* -------------------------------- sub parts ------------------------------- */
-
-function LayerPiece({
-  layer,
-  p,
-  mx,
-  my,
-  labelOpacity,
-  showLabels,
-  spread = 1,
-  rich = true,
-}: {
-  layer: Layer;
-  p: MotionValue<number>;
-  mx: MotionValue<number>;
-  my: MotionValue<number>;
-  labelOpacity: MotionValue<number>;
-  showLabels: boolean;
-  spread?: number;
-  /** enable 3D depth + mouse parallax (desktop only) */
-  rich?: boolean;
-}) {
-  const base = layer.base * spread;
-  const travel = layer.travel * spread;
-  // explosion runs 0.20 -> 0.60, held to 0.80, then eases away
-  const y = useTransform(p, [0, 0.2, 0.6, 0.8, 1], [base, base, base + travel, base + travel, base + travel * 0.86]);
-  const rotate = useTransform(p, [0.2, 0.6, 1], [0, layer.rot, layer.rot * 0.7]);
-  const rotateX = useTransform(p, [0.2, 0.6], [0, layer.rot * 1.6]);
-  const zpx = useTransform(p, [0.2, 0.6], [0, layer.depth * 90]);
-  const px = useTransform(mx, (v) => v * layer.depth);
-  const py = useTransform(my, (v) => v * layer.depth);
-
-  const style = rich
-    ? { y, x: px, translateY: py, rotate, rotateX, translateZ: zpx, zIndex: layer.z }
-    : { y, rotate, zIndex: layer.z };
-
-  return (
-    <div className="pointer-events-none absolute inset-0 grid place-items-center">
-    <motion.div style={style}>
-
-      <div
-        className="relative"
-        style={{
-          width: `${layer.w * 8}px`,
-          maxWidth: "68vw",
-          willChange: "transform",
-          backfaceVisibility: "hidden",
-        }}
-      >
-        <img
-          src={layer.src}
-          alt={layer.alt}
-          className={`w-full select-none ${rich ? "drop-shadow-[0_18px_26px_oklch(0_0_0_/_0.6)]" : "drop-shadow-[0_8px_10px_oklch(0_0_0_/_0.55)]"}`}
-          draggable={false}
-          decoding="async"
-        />
-
-        {showLabels && layer.label && (
-          <motion.div
-            style={{ opacity: labelOpacity }}
-            className={`pointer-events-none absolute top-1/2 hidden -translate-y-1/2 items-center gap-3 lg:flex ${
-              layer.side === "left" ? "right-[92%] flex-row-reverse" : "left-[92%]"
-            }`}
-          >
-            <span className="h-px w-14 bg-accent/70" />
-            <span className="whitespace-nowrap text-[10px] font-bold uppercase tracking-[0.24em] text-accent">
-              {layer.label}
-            </span>
-          </motion.div>
-        )}
-      </div>
-    </motion.div>
-    </div>
-  );
-
-}
-
-function Smoke({ opacity, reduced }: { opacity: MotionValue<number>; reduced?: boolean }) {
-  return (
-    <motion.div
-      style={{ opacity, contain: "paint" }}
-      className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
-    >
-      {(reduced ? [0, 1] : [0, 1, 2, 3]).map((i) => (
-        <span
-          key={i}
-          className={`absolute bottom-[22%] left-1/2 block h-64 w-64 rounded-full animate-smoke-drift ${reduced ? "blur-2xl" : "blur-3xl"}`}
-          style={{
-            marginLeft: `${(i - 1.5) * 70}px`,
-            animationDelay: `${i * 2.4}s`,
-            background:
-              i % 2 === 0
-                ? "radial-gradient(circle, oklch(1 0 0 / 0.14), transparent 68%)"
-                : "radial-gradient(circle, oklch(0.9 0.09 82 / 0.13), transparent 68%)",
-          }}
-        />
-      ))}
-    </motion.div>
-  );
-}
-
-const PARTICLES = [
-  { x: 12, y: 30, s: 4, d: 0 }, { x: 78, y: 22, s: 3, d: 1.4 },
-  { x: 30, y: 68, s: 5, d: 2.6 }, { x: 66, y: 74, s: 3, d: 0.8 },
-  { x: 46, y: 16, s: 3, d: 3.2 }, { x: 88, y: 55, s: 4, d: 2 },
-  { x: 20, y: 48, s: 3, d: 4 }, { x: 58, y: 88, s: 4, d: 1.1 },
-];
-
-function Particles({ opacity, reduced }: { opacity: MotionValue<number>; reduced?: boolean }) {
-  return (
-    <motion.div style={{ opacity }} className="pointer-events-none absolute inset-0 z-[80]">
-      {(reduced ? PARTICLES.slice(0, 3) : PARTICLES).map((p, i) => (
-        <span
-          key={i}
-          className="absolute rounded-full animate-particle-float"
-          style={{
-            left: `${p.x}%`,
-            top: `${p.y}%`,
-            width: p.s,
-            height: p.s,
-            animationDelay: `${p.d}s`,
-            background: i % 3 === 0 ? "oklch(0.93 0.05 82)" : "oklch(0.78 0.09 62 / 0.9)",
-          }}
-        />
-      ))}
-    </motion.div>
-  );
-}
-
-/* ---------------------------------- hero ---------------------------------- */
-
+/**
+ * Scroll-scrubbed hero video: the clip's playhead is driven directly by the
+ * user's scroll position (fully reversible), smoothed with a spring so it
+ * feels cinematic instead of stepping frame-to-frame.
+ */
 export function ExplodedBurgerHero() {
   const ref = useRef<HTMLElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
 
   const [desktop, setDesktop] = useState(false);
-  const [wide, setWide] = useState(false);
   const [calm, setCalm] = useState(false);
   const [open, setOpen] = useState(true);
+
   useEffect(() => {
     setOpen(isOpenNow());
     const mq = window.matchMedia("(min-width: 1024px) and (pointer: fine)");
-    const mqWide = window.matchMedia("(min-width: 1024px)");
     const mqCalm = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const on = () => { setDesktop(mq.matches); setWide(mqWide.matches); setCalm(mqCalm.matches); };
+    const on = () => {
+      setDesktop(mq.matches);
+      setCalm(mqCalm.matches);
+    };
     on();
     mq.addEventListener("change", on);
-    mqWide.addEventListener("change", on);
     mqCalm.addEventListener("change", on);
     return () => {
       mq.removeEventListener("change", on);
-      mqWide.removeEventListener("change", on);
       mqCalm.removeEventListener("change", on);
     };
   }, []);
 
-  // lighter spring (and a coarser rest threshold) on touch devices keeps the
-  // scrub cheap enough to hold 60fps on phones
-  const p = useSpring(
-    scrollYProgress,
-    desktop
-      ? { stiffness: 120, damping: 26, mass: 0.4, restDelta: 0.0005 }
-      : { stiffness: 90, damping: 22, mass: 0.25, restDelta: 0.004 },
-  );
-
-  // reduced motion: pin the timeline at 0 (assembled burger, no scrub)
+  const p = useSpring(scrollYProgress, { stiffness: 110, damping: 26, mass: 0.35, restDelta: 0.001 });
   const still = useMotionValue(0);
   const tl = calm ? still : p;
 
-  // camera / composition
-  const stageScale = useTransform(tl, [0, 0.2, 0.6, 0.8, 1], [1, 1.02, 0.9, 0.9, 0.74]);
-  const stageY = useTransform(tl, [0.8, 1], [0, -70]);
-  const stageXWide = useTransform(tl, [0.25, 0.6], [0, -190]);
-  const stageXNarrow = useTransform(tl, [0, 1], [0, 0]);
-  const stageX = wide ? stageXWide : stageXNarrow;
-  const stageOpacity = useTransform(tl, [0.9, 1], [1, 0.25]);
+  // drive the video playhead from the scrubbed timeline
+  useEffect(() => {
+    if (calm) return;
+    let raf = 0;
+    let target = 0;
+    const unsub = tl.on("change", (v) => {
+      target = Math.min(Math.max(v, 0), 1);
+    });
+    const loop = () => {
+      const v = videoRef.current;
+      if (v && v.readyState >= 2 && Number.isFinite(v.duration)) {
+        const next = target * (v.duration - 0.05);
+        if (Math.abs(v.currentTime - next) > 0.016) v.currentTime = next;
+      }
+      raf = requestAnimationFrame(loop);
+    };
+    raf = requestAnimationFrame(loop);
+    return () => {
+      cancelAnimationFrame(raf);
+      unsub();
+      cancelAnimationFrame(raf);
+    };
+  }, [tl, calm]);
+
+  const stageScale = useTransform(tl, [0, 0.6, 1], [1.04, 1, 0.94]);
+  const stageOpacity = useTransform(tl, [0, 0.05, 0.9, 1], [0.9, 1, 1, 0.3]);
   const textY = useTransform(tl, [0, 0.35, 1], [0, -40, -170]);
   const textOpacity = useTransform(tl, [0, 0.28, 0.45], [1, 1, 0]);
-  const labelOpacity = useTransform(tl, [0.58, 0.68, 0.92, 1], [0, 1, 1, 0]);
-  const smokeOpacity = useTransform(tl, [0, 0.2, 0.6, 0.85, 1], [0.35, 0.55, 1, 0.8, 0]);
-  const particleOpacity = useTransform(tl, [0.15, 0.4, 0.85, 1], [0, 1, 0.9, 0]);
   const hintOpacity = useTransform(tl, [0, 0.12], [1, 0]);
 
   const mxRaw = useMotionValue(0);
   const myRaw = useMotionValue(0);
   const mx = useSpring(mxRaw, { stiffness: 70, damping: 18 });
   const my = useSpring(myRaw, { stiffness: 70, damping: 18 });
-  const tilt = useTransform(mx, [-14, 14], [2.5, -2.5]);
 
   return (
     <section
@@ -246,17 +83,23 @@ export function ExplodedBurgerHero() {
       onMouseMove={(e) => {
         if (!desktop) return;
         const r = e.currentTarget.getBoundingClientRect();
-        mxRaw.set(((e.clientX - r.left) / r.width - 0.5) * 28);
-        myRaw.set(((e.clientY - window.scrollY - r.top) / window.innerHeight - 0.5) * 18);
+        mxRaw.set(((e.clientX - r.left) / r.width - 0.5) * 24);
+        myRaw.set(((e.clientY - window.scrollY - r.top) / window.innerHeight - 0.5) * 16);
       }}
-      onMouseLeave={() => { mxRaw.set(0); myRaw.set(0); }}
+      onMouseLeave={() => {
+        mxRaw.set(0);
+        myRaw.set(0);
+      }}
     >
       <div className="sticky top-0 h-screen overflow-hidden">
         <div className="pointer-events-none absolute left-1/2 top-1/2 h-[46rem] w-[46rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,_oklch(0.815_0.128_82_/_0.14),transparent_66%)]" />
 
-        <div className="relative mx-auto grid h-full max-w-7xl grid-rows-[62vh_auto] items-center gap-2 px-6 pb-8 pt-14 sm:gap-6 lg:grid-cols-[1fr_1.05fr] lg:grid-rows-1 lg:pb-0 lg:pt-0">
+        <div className="relative mx-auto grid h-full max-w-7xl grid-rows-[58vh_auto] items-center gap-2 px-6 pb-8 pt-14 sm:gap-6 lg:grid-cols-[1fr_1.05fr] lg:grid-rows-1 lg:pb-0 lg:pt-0">
           {/* copy */}
-          <motion.div style={{ y: textY, opacity: textOpacity }} className="relative z-[20] order-2 lg:order-1 lg:z-[90] lg:pt-0">
+          <motion.div
+            style={{ y: textY, opacity: textOpacity }}
+            className="relative z-[20] order-2 lg:order-1 lg:z-[90]"
+          >
             <div className="eyebrow">Burger Grand Nawada</div>
             <h1 className="display-xl mt-4 text-[clamp(2.4rem,7vw,5.2rem)]">
               Bite Into
@@ -264,14 +107,20 @@ export function ExplodedBurgerHero() {
               <span className="text-primary">Grandeur.</span>
             </h1>
             <p className="mt-5 max-w-md text-sm leading-relaxed text-muted-foreground sm:text-base">
-              Every layer, made to order. Scroll to take The Grand apart —
+              Every layer, made to order. Scroll to watch The Grand come together —
               toasted bun, fresh lettuce, melted cheese and a flame-grilled patty.
             </p>
             <div className="mt-7 flex flex-wrap items-center gap-3">
-              <Link to="/menu" className="btn-primary hover:btn-primary-hover inline-flex items-center gap-2 rounded-full px-7 py-4 text-xs font-bold uppercase tracking-[0.18em]">
+              <Link
+                to="/menu"
+                className="btn-primary hover:btn-primary-hover inline-flex items-center gap-2 rounded-full px-7 py-4 text-xs font-bold uppercase tracking-[0.18em]"
+              >
                 Order Now <ArrowRight className="h-4 w-4" />
               </Link>
-              <a href="#menu" className="btn-ghost hover:btn-ghost-hover inline-flex rounded-full px-7 py-4 text-xs font-bold uppercase tracking-[0.18em]">
+              <a
+                href="#menu"
+                className="btn-ghost hover:btn-ghost-hover inline-flex rounded-full px-7 py-4 text-xs font-bold uppercase tracking-[0.18em]"
+              >
                 Explore Menu
               </a>
             </div>
@@ -282,51 +131,46 @@ export function ExplodedBurgerHero() {
               </div>
               <div className="flex items-center gap-3">
                 <div className="flex text-accent">
-                  {[0, 1, 2, 3, 4].map((i) => <Star key={i} className="h-4 w-4 fill-current" />)}
+                  {[0, 1, 2, 3, 4].map((i) => (
+                    <Star key={i} className="h-4 w-4 fill-current" />
+                  ))}
                 </div>
                 <span className="text-xs text-muted-foreground">
-                  <strong className="text-foreground">{restaurant.rating}/5</strong> · {restaurant.reviewCount.toLocaleString()}+ reviews
+                  <strong className="text-foreground">{restaurant.rating}/5</strong> ·{" "}
+                  {restaurant.reviewCount.toLocaleString()}+ reviews
                 </span>
               </div>
             </div>
           </motion.div>
 
-          {/* stage */}
+          {/* scroll-scrubbed video stage */}
           <motion.div
-            style={{ scale: stageScale, x: stageX, y: stageY, opacity: stageOpacity, rotate: desktop ? tilt : 0 }}
-            className="relative z-[60] order-1 h-full w-full lg:order-2 lg:h-[80vh]"
+            style={{ scale: stageScale, opacity: stageOpacity, x: desktop ? mx : 0, y: desktop ? my : 0 }}
+            className="relative z-[60] order-1 h-full w-full lg:order-2 lg:h-[82vh]"
           >
-            <Smoke opacity={smokeOpacity} reduced={!desktop} />
             <div
-              className="absolute inset-0"
-              style={
-                desktop
-                  ? { perspective: 1200, transformStyle: "preserve-3d", contain: "paint" }
-                  : { contain: "paint" }
-              }
+              className="relative h-full w-full overflow-hidden rounded-[2rem]"
+              style={{ contain: "paint", willChange: "transform", backfaceVisibility: "hidden" }}
             >
-              {LAYERS.map((l) => (
-                <LayerPiece
-                  key={l.key}
-                  layer={l}
-                  p={tl}
-                  mx={mx}
-                  my={my}
-                  labelOpacity={labelOpacity}
-                  showLabels={desktop}
-                  spread={wide ? 1 : 0.55}
-                  rich={desktop}
-                />
-              ))}
+              <video
+                ref={videoRef}
+                src={heroScroll.url}
+                className="h-full w-full object-cover"
+                muted
+                playsInline
+                preload="auto"
+                autoPlay={false}
+                disablePictureInPicture
+                aria-label="The Grand burger being assembled"
+              />
+              <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,_oklch(0.145_0.004_60_/_0.75),transparent_45%)]" />
             </div>
-            <Particles opacity={particleOpacity} reduced={!wide} />
 
-            <motion.div style={{ x: mx, translateY: my }} className="absolute left-2 top-16 z-[95] sm:left-6 sm:top-6">
+            <motion.div className="absolute left-2 top-4 z-[95] sm:left-6 sm:top-6">
               <div className="animate-badge-float rounded-full bg-accent px-4 py-2 text-[10px] font-bold uppercase tracking-[0.2em] text-ink shadow-card">
                 Bestseller · {INR(90)}
               </div>
             </motion.div>
-
           </motion.div>
         </div>
 
