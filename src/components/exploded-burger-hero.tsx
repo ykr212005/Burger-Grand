@@ -3,7 +3,8 @@ import { motion, useMotionValue, useScroll, useSpring, useTransform } from "fram
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight, Star } from "lucide-react";
 
-import heroScroll from "@/assets/hero-scroll.mp4.asset.json";
+import heroScroll from "@/assets/hero-scrub.mp4.asset.json";
+import heroPoster from "@/assets/hero-poster.jpg.asset.json";
 import { INR, isOpenNow, restaurant } from "@/lib/restaurant";
 
 /**
@@ -49,11 +50,23 @@ export function ExplodedBurgerHero() {
     const unsub = tl.on("change", (v) => {
       target = Math.min(Math.max(v, 0), 1);
     });
+    let seeking = false;
     const loop = () => {
       const v = videoRef.current;
-      if (v && v.readyState >= 2 && Number.isFinite(v.duration)) {
+      if (v && v.readyState >= 2 && Number.isFinite(v.duration) && !seeking) {
         const next = target * (v.duration - 0.05);
-        if (Math.abs(v.currentTime - next) > 0.016) v.currentTime = next;
+        const cur = v.currentTime;
+        if (Math.abs(cur - next) > 1 / 60) {
+          // ease toward the target so fast scrolls stay fluid instead of snapping
+          const eased = cur + (next - cur) * 0.35;
+          seeking = true;
+          v.currentTime = eased;
+          const done = () => {
+            seeking = false;
+            v.removeEventListener("seeked", done);
+          };
+          v.addEventListener("seeked", done);
+        }
       }
       raf = requestAnimationFrame(loop);
     };
@@ -155,6 +168,7 @@ export function ExplodedBurgerHero() {
               <video
                 ref={videoRef}
                 src={heroScroll.url}
+                poster={heroPoster.url}
                 className="h-full w-full object-cover"
                 muted
                 playsInline
