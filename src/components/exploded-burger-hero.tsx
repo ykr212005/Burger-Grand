@@ -168,6 +168,7 @@ export function ExplodedBurgerHero() {
               <video
                 ref={videoRef}
                 src={heroScroll.url}
+                poster={heroPoster.url}
                 className="h-full w-full object-cover"
                 muted
                 playsInline
