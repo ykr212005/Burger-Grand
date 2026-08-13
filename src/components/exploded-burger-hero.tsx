@@ -20,6 +20,7 @@ export function ExplodedBurgerHero() {
   const [desktop, setDesktop] = useState(false);
   const [calm, setCalm] = useState(false);
   const [open, setOpen] = useState(true);
+  const [src, setSrc] = useState<string | null>(null);
 
   useEffect(() => {
     setOpen(isOpenNow());
@@ -30,6 +31,8 @@ export function ExplodedBurgerHero() {
       setCalm(mqCalm.matches);
     };
     on();
+    // lighter, all-intra encode on phones so every seek decodes instantly
+    setSrc(window.innerWidth < 1024 ? heroScrollMobile.url : heroScroll.url);
     mq.addEventListener("change", on);
     mqCalm.addEventListener("change", on);
     return () => {
@@ -37,6 +40,7 @@ export function ExplodedBurgerHero() {
       mqCalm.removeEventListener("change", on);
     };
   }, []);
+
 
   const p = useSpring(scrollYProgress, { stiffness: 110, damping: 26, mass: 0.35, restDelta: 0.001 });
   const still = useMotionValue(0);
