@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { ArrowRight, Star } from "lucide-react";
 
 import heroScroll from "@/assets/hero-scrub.mp4.asset.json";
+import heroScrollMobile from "@/assets/hero-scrub-mobile.mp4.asset.json";
 import heroPoster from "@/assets/hero-poster.jpg.asset.json";
 import { INR, isOpenNow, restaurant } from "@/lib/restaurant";
 
@@ -20,6 +21,7 @@ export function ExplodedBurgerHero() {
   const [desktop, setDesktop] = useState(false);
   const [calm, setCalm] = useState(false);
   const [open, setOpen] = useState(true);
+  const [src, setSrc] = useState<string | null>(null);
 
   useEffect(() => {
     setOpen(isOpenNow());
@@ -30,6 +32,8 @@ export function ExplodedBurgerHero() {
       setCalm(mqCalm.matches);
     };
     on();
+    // lighter, all-intra encode on phones so every seek decodes instantly
+    setSrc(window.innerWidth < 1024 ? heroScrollMobile.url : heroScroll.url);
     mq.addEventListener("change", on);
     mqCalm.addEventListener("change", on);
     return () => {
@@ -38,9 +42,40 @@ export function ExplodedBurgerHero() {
     };
   }, []);
 
+
   const p = useSpring(scrollYProgress, { stiffness: 110, damping: 26, mass: 0.35, restDelta: 0.001 });
   const still = useMotionValue(0);
   const tl = calm ? still : p;
+
+  // mobile browsers never decode a paused <video> until it has been played
+  // once; force a muted play/pause (and retry on the first user gesture) so
+  // the frames exist and scroll seeking actually paints.
+  useEffect(() => {
+    if (!src) return;
+    const v = videoRef.current;
+    if (!v) return;
+    let done = false;
+    const unlock = async () => {
+      if (done || !videoRef.current) return;
+      const el = videoRef.current;
+      try {
+        if (el.readyState === 0) el.load();
+        el.muted = true;
+        await el.play();
+        el.pause();
+        el.currentTime = 0.001;
+        done = true;
+        detach();
+      } catch {
+        /* needs a gesture — listeners below will retry */
+      }
+    };
+    const evts = ["touchstart", "pointerdown", "scroll", "wheel", "keydown"] as const;
+    const detach = () => evts.forEach((e) => window.removeEventListener(e, unlock));
+    evts.forEach((e) => window.addEventListener(e, unlock, { passive: true }));
+    void unlock();
+    return detach;
+  }, [src]);
 
   // drive the video playhead from the scrubbed timeline
   useEffect(() => {
@@ -53,7 +88,8 @@ export function ExplodedBurgerHero() {
     let seeking = false;
     const loop = () => {
       const v = videoRef.current;
-      if (v && v.readyState >= 2 && Number.isFinite(v.duration) && !seeking) {
+      if (v && v.readyState >= 1 && Number.isFinite(v.duration) && !seeking) {
+        if (!v.paused) v.pause();
         const next = target * (v.duration - 0.05);
         const cur = v.currentTime;
         if (Math.abs(cur - next) > 1 / 60) {
@@ -74,9 +110,9 @@ export function ExplodedBurgerHero() {
     return () => {
       cancelAnimationFrame(raf);
       unsub();
-      cancelAnimationFrame(raf);
     };
   }, [tl, calm]);
+
 
   const stageScale = useTransform(tl, [0, 0.6, 1], [1.04, 1, 0.94]);
   const stageOpacity = useTransform(tl, [0, 0.05, 0.9, 1], [0.9, 1, 1, 0.3]);
@@ -167,7 +203,8 @@ export function ExplodedBurgerHero() {
             >
               <video
                 ref={videoRef}
-                src={heroScroll.url}
+                {...(src ? { src } : {})}
+                key={src ?? "pending"}
                 poster={heroPoster.url}
                 className="h-full w-full object-cover"
                 muted
