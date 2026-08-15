@@ -3,8 +3,9 @@ import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight, Star } from "lucide-react";
 
-import heroCine from "@/assets/hero-cine-cut.mp4.asset.json";
 import heroCinePoster from "@/assets/hero-cine-poster.jpg.asset.json";
+
+const HERO_VIDEO_SRC = "/hero-cine.mp4";
 import { INR, isOpenNow, restaurant } from "@/lib/restaurant";
 
 /**
@@ -53,7 +54,7 @@ export function ExplodedBurgerHero() {
       >
         <video
           ref={videoRef}
-          src={heroCine.url}
+          src={HERO_VIDEO_SRC}
           poster={heroCinePoster.url}
           className="h-full w-full object-cover object-center"
           autoPlay
