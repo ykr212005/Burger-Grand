@@ -372,7 +372,7 @@ function Bestsellers() {
           </div>
         </div>
 
-        <div ref={scroller} className="mt-12 flex snap-x snap-mandatory gap-6 overflow-x-auto pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div ref={scroller} className="mt-8 flex snap-x snap-mandatory gap-6 overflow-x-auto pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {best.map((it, i) => (
             <article key={it.name} className="w-[19rem] shrink-0 snap-start">
               <div className="relative overflow-hidden">
@@ -561,7 +561,7 @@ function Reviews() {
           </Reveal>
         </div>
 
-        <div className="mt-12 flex snap-x snap-mandatory gap-6 overflow-x-auto pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div className="mt-8 flex snap-x snap-mandatory gap-6 overflow-x-auto pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {reviews.map((r) => (
             <blockquote key={r.text} className="w-[21rem] shrink-0 snap-start surface p-7">
               <div className="flex text-accent">{[0, 1, 2, 3, 4].map((i) => <Star key={i} className="h-3.5 w-3.5 fill-current" />)}</div>
