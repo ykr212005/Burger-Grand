@@ -54,7 +54,7 @@ export function ExplodedBurgerHero() {
       >
         <video
           ref={videoRef}
-          src={heroCine.url}
+          src={HERO_VIDEO_SRC}
           poster={heroCinePoster.url}
           className="h-full w-full object-cover object-center"
           autoPlay
