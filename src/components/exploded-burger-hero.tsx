@@ -32,12 +32,24 @@ export function ExplodedBurgerHero() {
 
   return (
     <section className="relative h-[100dvh] min-h-[34rem] w-full overflow-hidden bg-ink">
-      {/* video layer */}
+      {/* poster fallback — visible immediately while the video primes */}
+      <div className="absolute inset-0">
+        <img
+          src={heroCinePoster.url}
+          alt=""
+          className="h-full w-full object-cover object-center"
+          decoding="async"
+          fetchPriority="high"
+          aria-hidden="true"
+        />
+      </div>
+
+      {/* video layer fades in over the poster once it can play */}
       <motion.div
         className="absolute inset-0"
-        initial={{ opacity: 0, scale: 1.06 }}
-        animate={{ opacity: ready ? 1 : 0, scale: ready ? 1 : 1.06 }}
-        transition={{ duration: 1.6, ease }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: ready ? 1 : 0 }}
+        transition={{ duration: 1.2, ease }}
       >
         <video
           ref={videoRef}
