@@ -142,7 +142,7 @@ const byName = (n: string) => items.find((i) => i.name === n)!;
 function Marquee() {
   const words = ["Fresh Ingredients", "Loaded Cheese", "Quick Service", "Great Value", "Made To Order", "Nawada Metro"];
   return (
-    <div className="border-y border-border bg-ink py-4 text-foreground">
+    <div className="overflow-hidden border-y border-border bg-ink py-3 text-foreground">
       <div className="flex w-max animate-marquee gap-10">
         {[0, 1].map((k) => (
           <div key={k} className="flex gap-10">
@@ -174,7 +174,7 @@ function MenuSection() {
   const list = useMemo(() => items.filter((i) => i.category === tab).slice(0, 6), [tab]);
 
   return (
-    <section id="menu" className="bg-offwhite py-24">
+    <section id="menu" className="bg-offwhite py-14 sm:py-20">
       <div className="mx-auto max-w-7xl px-6">
         <SectionHead
           eyebrow="Our menu"
@@ -262,7 +262,7 @@ const highlights = [
 
 function SignatureBurger() {
   return (
-    <section id="specials" className="bg-cream py-24">
+    <section id="specials" className="bg-cream py-14 sm:py-20">
       <div className="mx-auto grid max-w-7xl items-center gap-14 px-6 lg:grid-cols-2">
         <Reveal>
           <div className="relative">
@@ -312,7 +312,7 @@ function FeatureSplit({
   picks: string[]; reverse?: boolean; tone?: "offwhite" | "cream";
 }) {
   return (
-    <section id={id} className={`py-24 ${tone === "cream" ? "bg-cream" : "bg-offwhite"}`}>
+    <section id={id} className={`py-14 sm:py-20 ${tone === "cream" ? "bg-cream" : "bg-offwhite"}`}>
       <div className={`mx-auto grid max-w-7xl items-center gap-14 px-6 lg:grid-cols-2 ${reverse ? "lg:[&>*:first-child]:order-2" : ""}`}>
         <Reveal>
           <img src={image} alt={alt} loading="lazy" width={1200} height={900} className="h-[26rem] w-full object-cover" />
@@ -355,7 +355,7 @@ function Bestsellers() {
   const nudge = (dir: number) => scroller.current?.scrollBy({ left: dir * 340, behavior: "smooth" });
 
   return (
-    <section className="bg-ink py-24 text-foreground">
+    <section className="bg-ink py-14 sm:py-20 text-foreground">
       <div className="mx-auto max-w-7xl px-6">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div className="max-w-xl">
@@ -401,7 +401,7 @@ function Bestsellers() {
 
 function Combo() {
   return (
-    <section className="relative overflow-hidden bg-primary py-24 text-primary-foreground">
+    <section className="relative overflow-hidden bg-primary py-14 sm:py-20 text-primary-foreground">
       <div className="mx-auto grid max-w-7xl items-center gap-12 px-6 lg:grid-cols-2">
         <div>
           <div className="text-[11px] font-semibold uppercase tracking-[0.28em] text-accent">The perfect combo</div>
@@ -441,7 +441,7 @@ const why = [
 
 function Why() {
   return (
-    <section className="bg-offwhite py-24">
+    <section className="bg-offwhite py-14 sm:py-20">
       <div className="mx-auto max-w-7xl px-6">
         <SectionHead eyebrow="Why Burger Grand" title="Made properly. Every time." />
         <div className="mt-12 border-t border-border">
@@ -465,7 +465,7 @@ function Why() {
 
 function About() {
   return (
-    <section id="about" className="bg-cream py-24">
+    <section id="about" className="bg-cream py-14 sm:py-20">
       <div className="mx-auto grid max-w-7xl items-center gap-14 px-6 lg:grid-cols-[1fr_1.1fr]">
         <Reveal>
           <img src={interiorImg} alt="Inside Burger Grand, Uttam Nagar" loading="lazy" width={1200} height={900} className="h-[26rem] w-full object-cover" />
@@ -510,7 +510,7 @@ const gallery = [
 
 function Gallery() {
   return (
-    <section id="gallery" className="bg-offwhite py-24">
+    <section id="gallery" className="bg-offwhite py-14 sm:py-20">
       <div className="mx-auto max-w-7xl px-6">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <SectionHead eyebrow="Follow the cravings" title="The Grand experience" />
@@ -546,7 +546,7 @@ const reviews = [
 
 function Reviews() {
   return (
-    <section id="reviews" className="bg-cream py-24">
+    <section id="reviews" className="bg-cream py-14 sm:py-20">
       <div className="mx-auto max-w-7xl px-6">
         <div className="flex flex-wrap items-end justify-between gap-8">
           <SectionHead eyebrow="Reviews" title={<>Don&apos;t take our<br />word for it.</>} />
@@ -582,7 +582,7 @@ function Location() {
   useEffect(() => setOpen(isOpenNow()), []);
 
   return (
-    <section id="location" className="bg-offwhite py-24">
+    <section id="location" className="bg-offwhite py-14 sm:py-20">
       <div className="mx-auto max-w-7xl px-6">
         <SectionHead eyebrow="Find us" title="Come find us." sub={`${restaurant.addressLine1}, ${restaurant.addressLine2}`} />
 
